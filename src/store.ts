@@ -1,15 +1,12 @@
-import { combineReducers, createStore } from 'redux'
-import { devToolsEnhancer } from 'redux-devtools-extension'
-// import { CounterReducer } from './reducers'
+import {applyMiddleware, createStore} from 'redux'
+import { composeWithDevTools } from 'redux-devtools-extension'
+import thunk from 'redux-thunk'
+import reducers from "./Redux/Reducers";
 
-/* Create root reducer, containing all features of the application */
-const rootReducer = combineReducers({
-  // count: CounterReducer,
-})
 
 const store = createStore(
-  rootReducer,
-  /* preloadedState, */ devToolsEnhancer({})
+  reducers,
+  /* preloadedState, */ composeWithDevTools(applyMiddleware(thunk))
 )
 
 export default store
