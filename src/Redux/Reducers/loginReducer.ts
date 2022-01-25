@@ -7,11 +7,13 @@ interface LoginState {
 }
 
 const reducer = (state: LoginState, action: Action) => {
+    if (state === undefined)
+        state = {JWTToken : '', status : ''}
     switch(action.type){
         case LoginEnum.LOGOUT:
-            return {JWTToken: '', status: ''}
+            return state = {JWTToken: '', status: ''}
         case LoginEnum.LOGIN:
-            return {JWTToken: action.token, status: action.status}
+            return state = {JWTToken: action.token, status: action.status}
         default :
             return state;
     }
