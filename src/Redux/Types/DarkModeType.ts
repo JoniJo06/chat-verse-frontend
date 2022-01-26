@@ -1,3 +1,3 @@
-export type DarkModeType = {
+export type DarkModeAction = {
     type: 'toggle'
 }

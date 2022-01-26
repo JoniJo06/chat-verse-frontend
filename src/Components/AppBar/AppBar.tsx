@@ -1,104 +1,90 @@
-import * as React from 'react'
-import AppBar from '@mui/material/AppBar'
-import Box from '@mui/material/Box'
-import Toolbar from '@mui/material/Toolbar'
-import IconButton from '@mui/material/IconButton'
-import Typography from '@mui/material/Typography'
-import Badge from '@mui/material/Badge'
-import MenuItem from '@mui/material/MenuItem'
-import Menu from '@mui/material/Menu'
-import MenuIcon from '@mui/icons-material/Menu'
-import SearchIcon from '@mui/icons-material/Search'
-import AccountCircle from '@mui/icons-material/AccountCircle'
-import MailIcon from '@mui/icons-material/Mail'
-import NotificationsIcon from '@mui/icons-material/Notifications'
-import MoreIcon from '@mui/icons-material/MoreVert'
+import * as React from 'react';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Badge from '@mui/material/Badge';
+import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import SearchIcon from '@mui/icons-material/Search';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import MailIcon from '@mui/icons-material/Mail';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import MoreIcon from '@mui/icons-material/MoreVert';
 
-import { Search, SearchIconWrapper, StyledInputBase , MaterialUISwitch} from './AppBar.styles'
+import { Search, SearchIconWrapper, StyledInputBase, MaterialUISwitch } from './AppBar.styles';
 
-import {useDispatch, useSelector} from "react-redux";
-import {bindActionCreators} from "redux";
-import {actionCreators} from './../../Redux'
-import {RootState} from './../../Redux/Reducers'
-import {ProjectEnum} from './../../Enums'
+import { useDispatch, useSelector } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { actionCreators } from '../../Redux';
+import { RootState } from '../../Redux/Reducers';
+import { ProjectEnum } from '../../Enums';
 
 export default function PrimarySearchAppBar() {
 
-  const darkMode = useSelector((state: RootState) => state.darkMode)
+  const darkMode = useSelector((state: RootState) => state.darkMode);
   const dispatch = useDispatch();
 
+  const { toggleDarkMode } = bindActionCreators(actionCreators, dispatch);
 
-  const {toggleDarkMode} = bindActionCreators(actionCreators, dispatch);
-
-
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [
     mobileMoreAnchorEl,
     setMobileMoreAnchorEl,
-  ] = React.useState<null | HTMLElement>(null)
+  ] = React.useState<null | HTMLElement>(null);
 
-  const isMenuOpen = Boolean(anchorEl)
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl)
+  const isMenuOpen = Boolean(anchorEl);
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
+    setAnchorEl(event.currentTarget);
+  };
 
   const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null)
-  }
+    setMobileMoreAnchorEl(null);
+  };
 
   const handleMenuClose = () => {
-    setAnchorEl(null)
-    handleMobileMenuClose()
-  }
+    setAnchorEl(null);
+    handleMobileMenuClose();
+  };
 
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setMobileMoreAnchorEl(event.currentTarget)
-  }
+    setMobileMoreAnchorEl(event.currentTarget);
+  };
 
-  const menuId = 'primary-search-account-menu'
+  const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
+      anchorEl={anchorEl} anchorOrigin={{
+      vertical: 'top',
+      horizontal: 'right',
+    }} id={menuId} keepMounted transformOrigin={{
+      vertical: 'top',
+      horizontal: 'right',
+    }} open={isMenuOpen} onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
-  )
+  );
 
-  const mobileMenuId = 'primary-search-account-menu-mobile'
+  const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
     <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
+      anchorEl={mobileMoreAnchorEl} anchorOrigin={{
+      vertical: 'top',
+      horizontal: 'right',
+    }} id={mobileMenuId} keepMounted transformOrigin={{
+      vertical: 'top',
+      horizontal: 'right',
+    }} open={isMobileMenuOpen} onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
+        <IconButton size='large' aria-label='show 4 new mails' color='inherit'>
+          <Badge badgeContent={4} color='error'>
             <MailIcon />
           </Badge>
         </IconButton>
@@ -106,11 +92,9 @@ export default function PrimarySearchAppBar() {
       </MenuItem>
       <MenuItem>
         <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
+          size='large' aria-label='show 17 new notifications' color='inherit'
         >
-          <Badge badgeContent={17} color="error">
+          <Badge badgeContent={17} color='error'>
             <NotificationsIcon />
           </Badge>
         </IconButton>
@@ -118,37 +102,30 @@ export default function PrimarySearchAppBar() {
       </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
+          size='large'
+          aria-label='account of current user'
+          aria-controls='primary-search-account-menu'
+          aria-haspopup='true'
+          color='inherit'
         >
           <AccountCircle />
         </IconButton>
         <p>Profile</p>
       </MenuItem>
     </Menu>
-  )
+  );
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position='static'>
         <Toolbar>
           <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
+            size='large' edge='start' color='inherit' aria-label='open drawer' sx={{ mr: 2 }}
           >
             <MenuIcon />
           </IconButton>
           <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
+            variant='h6' noWrap component='div' sx={{ display: { xs: 'none', sm: 'block' } }}
           >
             {ProjectEnum.APP_NAME.toUpperCase()}
           </Typography>
@@ -157,51 +134,46 @@ export default function PrimarySearchAppBar() {
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
+              placeholder='Search…' inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton
-              size="large"
-              aria-label="show 4 new mails"
-              color="inherit"
+              size='large' aria-label='show 4 new mails' color='inherit'
             >
-              <Badge badgeContent={4} color="error">
+              <Badge badgeContent={4} color='error'>
                 <MailIcon />
               </Badge>
             </IconButton>
             <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
+              size='large' aria-label='show 17 new notifications' color='inherit'
             >
-              <Badge badgeContent={17} color="error">
+              <Badge badgeContent={17} color='error'>
                 <NotificationsIcon />
               </Badge>
             </IconButton>
-            <MaterialUISwitch sx={{ m: 1 }} onChange={()=>toggleDarkMode()} checked={darkMode} />
+            <MaterialUISwitch sx={{ m: 1 }} onChange={() => toggleDarkMode()} checked={darkMode} />
             <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
+              size='large'
+              edge='end'
+              aria-label='account of current user'
               aria-controls={menuId}
-              aria-haspopup="true"
+              aria-haspopup='true'
               onClick={handleProfileMenuOpen}
-              color="inherit"
+              color='inherit'
             >
               <AccountCircle />
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
-              size="large"
-              aria-label="show more"
+              size='large'
+              aria-label='show more'
               aria-controls={mobileMenuId}
-              aria-haspopup="true"
+              aria-haspopup='true'
               onClick={handleMobileMenuOpen}
-              color="inherit"
+              color='inherit'
             >
               <MoreIcon />
             </IconButton>
@@ -211,5 +183,5 @@ export default function PrimarySearchAppBar() {
       {renderMobileMenu}
       {renderMenu}
     </Box>
-  )
+  );
 }

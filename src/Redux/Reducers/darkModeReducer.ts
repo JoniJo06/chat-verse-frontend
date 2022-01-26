@@ -1,10 +1,13 @@
-import { DarkModeType } from '../Types'
+import { DarkModeAction as Action } from '../Types';
 
-const reducer = (state: boolean, action: DarkModeType) => {
-  state = localStorage.getItem('darkMode') === 'true' || false
-  if (action.type === 'toggle') {
-    localStorage.setItem('darkMode', String(!state))
-    return !state
-  } else return state
-}
-export default reducer
+const reducer = (state: boolean, action: Action) => {
+  state = localStorage.getItem('darkMode') === 'true' || false;
+  switch (action.type) {
+    case 'toggle':
+      localStorage.setItem('darkMode', String(!state));
+      return !state;
+    default:
+      return state;
+  }
+};
+export default reducer;

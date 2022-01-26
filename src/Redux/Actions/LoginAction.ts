@@ -1,19 +1,19 @@
 import { Dispatch } from 'redux'
-import { LoginAction } from '../Types'
+import { TokenAction as Action } from '../Types'
 import { LoginEnum } from '../../Enums'
 
-export const userLogin = (token: string, status: string) => {
-  return (dispatch: Dispatch<LoginAction>) => {
+export const userLogin = (token: string) => {
+  console.log(token)
+  return (dispatch: Dispatch<Action>) => {
     dispatch({
       type: LoginEnum.LOGIN,
-      token: token,
-      status: status,
+      token: token
     })
   }
 }
 
 export const userLogout = () => {
-  return (dispatch: Dispatch<LoginAction>) => {
+  return (dispatch: Dispatch<Action>) => {
     dispatch({
       type: LoginEnum.LOGOUT,
     })

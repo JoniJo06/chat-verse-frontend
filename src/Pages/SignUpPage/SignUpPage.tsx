@@ -1,5 +1,5 @@
-import React from 'react'
-import {} from './SignUpPage.styles'
+import React, { useEffect } from 'react';
+import {} from './SignUpPage.styles';
 import {
   Grid,
   TextField,
@@ -11,32 +11,36 @@ import {
   RadioGroup,
   Radio,
   FormLabel,
-} from '@mui/material'
-import { useState } from 'react'
-import { NavLink} from 'react-router-dom'
-import { LockOutlined as LockOutlinedIcon } from '@mui/icons-material'
-import {useTheme} from '@mui/material/styles'
+} from '@mui/material';
+import { useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { LockOutlined as LockOutlinedIcon } from '@mui/icons-material';
+import { useTheme } from '@mui/material/styles';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../Redux/Reducers';
+import axios from 'axios';
+import { bindActionCreators } from 'redux';
+import { actionCreators } from '../../Redux';
 
 const paperStyle = {
   padding: 20,
-  // height: '70vh',
-  minWidth: 280,
+  minWidth: 200,
   maxWidth: 1000,
   margin: '20px auto',
-}
-const avatarStyle = { backgroundColor: '#1bbd7e' }
-const btnstyle = { margin: '8px 0' }
+};
+const avatarStyle = { backgroundColor: '#1bbd7e' };
+const btnstyle = { margin: '20px 0' };
 
 type SignUpFormData = {
-  first_name: string
-  last_name: string
-  username: string
-  email: string
-  birthday: string
-  gender: string
-  password: string
-  retype_password: string
-}
+  first_name: string;
+  last_name: string;
+  username: string;
+  email: string;
+  birthday: string;
+  gender: string;
+  password: string;
+  retype_password: string;
+};
 
 const SignUpPage: React.FC = () => {
   const [formData, setFormData] = useState<SignUpFormData>({
@@ -48,45 +52,79 @@ const SignUpPage: React.FC = () => {
     gender: '',
     password: '',
     retype_password: '',
-  })
+  });
 
   const theme = useTheme();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { userLogin, userStatusSet } = bindActionCreators(actionCreators, dispatch);
+
+  const userStatus = useSelector((state: RootState) => state.userStatus);
+
+  useEffect(() => {
+    const fn = async () => {
+      if(await userStatus)
+        navigate('/home')
+    }
+    fn();
+  }, []);
 
   const handleChange = (e: any) => {
     setFormData((prev) => {
-      return { ...prev, [e.target.name]: e.target.value }
-    })
-  }
+      return { ...prev, [e.target.name]: e.target.value };
+    });
+  };
 
   const handleSubmit = (e: any) => {
-    e.preventDefault()
-    setFormData((prev) => {
-      let temp = prev
-      Object.keys(temp).forEach((param: string) => {
-        temp = { ...temp, [param]: '' }
-      })
+    console.log(process.env.REACT_APP_BACKEND_URL);
+    e.preventDefault();
 
-      return temp
-    })
-  }
+    if (formData.password === formData.retype_password) {
+      axios
+        .post(process.env.REACT_APP_BACKEND_URL + '/users/signup', {
+          first_name: formData.first_name,
+          last_name: formData.last_name,
+          username: formData.username,
+          email: formData.email,
+          birthday: formData.birthday,
+          gender: formData.gender,
+          password: formData.password,
+        })
+        .then((res) => {
+          userLogin(res.data.token);
+          userStatusSet(res.data.status);
+          navigate('/home');
+        })
+        .catch((err) => console.log(err.message));
+    }
+
+    setFormData((prev) => {
+      let temp = prev;
+      Object.keys(temp).forEach((param: string) => {
+        temp = { ...temp, [param]: '' };
+      });
+      return temp;
+    });
+  };
 
   return (
-    <Grid container padding="20px">
+    <Grid container padding='20px'>
       <Paper elevation={10} style={paperStyle}>
         <form onSubmit={handleSubmit}>
           <Grid item style={{ display: 'grid', placeItems: 'center' }}>
             <Avatar style={avatarStyle}>
               <LockOutlinedIcon />
             </Avatar>
-            <Typography variant="h2">Sign Up</Typography>
+            <Typography variant='h2'>Sign Up</Typography>
           </Grid>
-          <Grid container spacing={2}>
+          <Grid container spacing={2} sx={{ marginTop: 1 }}>
             <Grid item xs={12} md={6}>
               <TextField
-                label="First name"
-                placeholder="Enter first name"
-                type="text"
-                name="first_name"
+                label='First name'
+                placeholder='Enter first name'
+                type='text'
+                name='first_name'
                 fullWidth
                 required
                 onChange={handleChange}
@@ -95,10 +133,10 @@ const SignUpPage: React.FC = () => {
             </Grid>
             <Grid item xs={12} md={6}>
               <TextField
-                label="Last name"
-                placeholder="Enter last name"
-                type="text"
-                name="last_name"
+                label='Last name'
+                placeholder='Enter last name'
+                type='text'
+                name='last_name'
                 fullWidth
                 required
                 onChange={handleChange}
@@ -108,10 +146,10 @@ const SignUpPage: React.FC = () => {
 
             <Grid item xs={12} md={6}>
               <TextField
-                label="username"
-                placeholder="Enter username"
-                type="text"
-                name="username"
+                label='username'
+                placeholder='Enter username'
+                type='text'
+                name='username'
                 fullWidth
                 required
                 onChange={handleChange}
@@ -120,10 +158,10 @@ const SignUpPage: React.FC = () => {
             </Grid>
             <Grid item xs={12} md={6}>
               <TextField
-                label="email"
-                placeholder="Enter email"
-                type="email"
-                name="email"
+                label='email'
+                placeholder='Enter email'
+                type='email'
+                name='email'
                 fullWidth
                 required
                 onChange={handleChange}
@@ -133,9 +171,9 @@ const SignUpPage: React.FC = () => {
 
             <Grid item xs={12} md={6}>
               <TextField
-                label="Birthday"
-                type="date"
-                name="birthday"
+                label='Birthday'
+                type='date'
+                name='birthday'
                 fullWidth
                 required
                 onChange={handleChange}
@@ -144,38 +182,28 @@ const SignUpPage: React.FC = () => {
               />
             </Grid>
             <Grid item xs={12} md={6}>
-              <FormLabel id="gender">Gender *</FormLabel>
+              <FormLabel id='gender'>Gender *</FormLabel>
               <RadioGroup
-                row
-                aria-labelledby="gender"
-                name="gender"
-                onChange={handleChange}
-                value={formData.gender}
+                row aria-labelledby='gender' name='gender' onChange={handleChange} value={formData.gender}
               >
                 <FormControlLabel
-                  value="female"
-                  control={<Radio required={true} />}
-                  label="Female"
+                  value='female' control={<Radio required={true} />} label='Female'
                 />
                 <FormControlLabel
-                  value="male"
-                  control={<Radio required={true} />}
-                  label="Male"
+                  value='male' control={<Radio required={true} />} label='Male'
                 />
                 <FormControlLabel
-                  value="other"
-                  control={<Radio required={true} />}
-                  label="Other"
+                  value='other' control={<Radio required={true} />} label='Other'
                 />
               </RadioGroup>
             </Grid>
 
             <Grid item xs={12} md={6}>
               <TextField
-                label="password"
-                placeholder="Enter password"
-                type="password"
-                name="password"
+                label='password'
+                placeholder='Enter password'
+                type='password'
+                name='password'
                 fullWidth
                 required
                 onChange={handleChange}
@@ -185,10 +213,10 @@ const SignUpPage: React.FC = () => {
 
             <Grid item xs={12} md={6}>
               <TextField
-                label="retype password"
-                placeholder="Retype password"
-                type="password"
-                name="retype_password"
+                label='retype password'
+                placeholder='Retype password'
+                type='password'
+                name='retype_password'
                 fullWidth
                 required
                 onChange={handleChange}
@@ -201,11 +229,7 @@ const SignUpPage: React.FC = () => {
           {/*  label="Remember me"*/}
           {/*/>*/}
           <Button
-            type="submit"
-            color="primary"
-            variant="contained"
-            style={btnstyle}
-            fullWidth
+            type='submit' color='primary' variant='contained' style={btnstyle} fullWidth
           >
             Sign up
           </Button>
@@ -215,10 +239,17 @@ const SignUpPage: React.FC = () => {
         {/*</Typography>*/}
         <Typography>
           {' '}
-          Do you have an account ?<NavLink style={{color: theme.palette.mode === 'dark' ?  'lightblue': 'darkblue'}} to="/login">Sign in</NavLink>
+          Do you have an account ?
+          <NavLink
+            style={{
+              color: theme.palette.mode === 'dark' ? 'lightblue' : 'darkblue',
+            }} to='/login'
+          >
+            Sign in
+          </NavLink>
         </Typography>
       </Paper>
     </Grid>
-  )
-}
-export default SignUpPage
+  );
+};
+export default SignUpPage;

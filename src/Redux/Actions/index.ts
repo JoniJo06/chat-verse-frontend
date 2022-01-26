@@ -1,10 +1,13 @@
-import {Dispatch} from 'redux'
-import { DarkModeType } from '../Types'
+import { Dispatch } from 'redux';
+import { DarkModeAction as Action } from '../Types';
+
+export { userStatusSet, userStatusRemove } from './UserStatusAction';
+export { userLogin, userLogout } from './LoginAction'
 
 export const toggleDarkMode = () => {
-    return (dispatch: Dispatch<DarkModeType>) => {
-        dispatch({
-            type: 'toggle'
-        })
-    }
-}
+  return (dispatch: Dispatch<Action>) => {
+    dispatch({
+      type: 'toggle',
+    });
+  };
+};
