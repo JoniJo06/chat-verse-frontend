@@ -1,1 +1,5 @@
 export { default as AppBar } from './AppBar/AppBar'
+export { default as ChatCollection } from './ChatCollection/ChatCollection'
+export { default as TopicCollection } from './TopicCollection/TopicCollection'
+export { default as Chat } from './Chat/Chat'
+export { default as ChatCard } from './ChatCard/ChatCard'

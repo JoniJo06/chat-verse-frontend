@@ -1,13 +1,29 @@
-import { DarkModeAction as Action } from '../Types';
+import { DarkModeActionTypes, DarkModeState } from '../Types';
+import { Reducer } from 'redux';
 
-const reducer = (state: boolean, action: Action) => {
-  state = localStorage.getItem('darkMode') === 'true' || false;
+export const initialState: DarkModeState = {
+  data: {
+    darkMode: localStorage.getItem('darkMode') === 'true' || false,
+  },
+  errors: undefined,
+  loading: false,
+};
+
+const reducer: Reducer<DarkModeState> = (
+  state: DarkModeState = initialState,
+  action) => {
   switch (action.type) {
-    case 'toggle':
-      localStorage.setItem('darkMode', String(!state));
-      return !state;
+    case DarkModeActionTypes.TOGGLE_DARK_MODE:
+      return {
+        error: state.errors,
+        loading: state.loading,
+        data: {
+          darkMode: !state.data.darkMode,
+        },
+      };
     default:
       return state;
   }
+
 };
-export default reducer;
+export { reducer as darkModeReducer};

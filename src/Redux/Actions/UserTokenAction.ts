@@ -1,4 +1,4 @@
-import { UserStatusActionTypes, UserStatus } from '../Types';
+import { UserTokenActionTypes, UserToken } from '../Types';
 
 import { ActionCreator, Action, Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
@@ -10,40 +10,40 @@ export type AppThunk = ThunkAction<void,
   null,
   Action<string>>;
 
-export const setUserStatus: ActionCreator<ThunkAction<void,
+export const setUserToken: ActionCreator<ThunkAction<void,
   ApplicationState,
-  UserStatus,
-  Action<string>>> = (status: string) => {
+  UserToken,
+  Action<string>>> = (token: string) => {
   return (dispatch: Dispatch): Action => {
     try {
       return dispatch({
-        type: UserStatusActionTypes.SET_STATUS,
-        payload: status,
+        type: UserTokenActionTypes.SET_TOKEN,
+        payload: token,
       });
 
     } catch (err) {
       return dispatch({
-        type: UserStatusActionTypes.SET_STATUS_FAILURE,
+        type: UserTokenActionTypes.SET_TOKEN_FAILURE,
         payload: null,
       });
     }
   };
 };
 
-export const removeUserStatus: ActionCreator<ThunkAction<void,
+export const removeUserToken: ActionCreator<ThunkAction<void,
   ApplicationState,
-  UserStatus,
+  UserToken,
   Action<string>>> = () => {
   return (dispatch: Dispatch): Action => {
     try {
       return dispatch({
-        type: UserStatusActionTypes.SET_STATUS,
+        type: UserTokenActionTypes.SET_TOKEN,
         payload: null,
       });
 
     } catch (err) {
       return dispatch({
-        type: UserStatusActionTypes.REMOVE_STATUS_FAILURE,
+        type: UserTokenActionTypes.REMOVE_TOKEN_FAILURE,
         payload: null,
       });
     }

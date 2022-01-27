@@ -12,11 +12,13 @@ import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { LockOutlined as LockOutlinedIcon } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../Redux/Reducers';
 import axios from 'axios';
-import { bindActionCreators } from 'redux';
-import { actionCreators } from '../../Redux';
+import { ApplicationState } from '../../Redux';
+// import { UserToken } from '../../Redux/Types';
+import { connect } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from 'redux';
+import { setUserToken, setUserStatus } from '../../Redux/Actions';
 
 const paperStyle = {
   padding: 20,
@@ -32,7 +34,21 @@ type LoginFormData = {
   password: string;
 };
 
-const LoginPage: React.FC = () => {
+interface PropsFromState {
+  userStatus: string;
+  userStatusLoading: boolean;
+  errors?: string;
+}
+
+interface PropsFromDispatch {
+  setUserToken: (token: string) => void;
+  setUserStatus: (status: string) => void;
+}
+
+type AllProps = PropsFromState & PropsFromDispatch
+
+// eslint-disable-next-line @typescript-eslint/no-shadow
+const LoginPage: React.FC<AllProps> = ({ userStatus, setUserToken, setUserStatus }) => {
   const [formData, setFormData] = useState<LoginFormData>({
     username: '',
     password: '',
@@ -41,17 +57,12 @@ const LoginPage: React.FC = () => {
   const theme = useTheme();
   const navigate = useNavigate();
 
-  const dispatch = useDispatch();
-
-  const { userLogin, userStatusSet } = bindActionCreators(actionCreators, dispatch);
-  const userStatus = useSelector((state: RootState) => state.userStatus);
-
   useEffect(() => {
     const fn = async () => {
-      if(await userStatus)
-        navigate('/home')
-    }
-    fn();
+      if (userStatus)
+        navigate('/home');
+    };
+    void fn();
   }, []);
 
   const handleChange = (e: any) => {
@@ -66,11 +77,11 @@ const LoginPage: React.FC = () => {
     axios
       .post(process.env.REACT_APP_BACKEND_URL + '/users/login', {
         username: formData.username,
-        password: formData.password
+        password: formData.password,
       })
       .then((res) => {
-        userLogin(res.data.token);
-        userStatusSet(res.data.status);
+        setUserToken(res.data.token);
+        setUserStatus(res.data.status);
         navigate('/home');
       })
       .catch((err) => console.log(err.message));
@@ -150,4 +161,16 @@ const LoginPage: React.FC = () => {
     </Grid>
   );
 };
-export default LoginPage;
+
+const mapStateToProps = ({ userStatus }: ApplicationState) => ({
+  userStatus: userStatus.data.userStatus,
+  userStatusLoading: userStatus.loading,
+});
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+  return {
+    setUserToken: (token: string) => dispatch(setUserToken(token)),
+    setUserStatus: (status: string) => dispatch(setUserStatus(status)),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);

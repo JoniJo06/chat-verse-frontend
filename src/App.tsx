@@ -4,34 +4,56 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { HomePage, LandingPage, LoginPage, SignUpPage } from './Pages';
 import { AppBar } from './Components';
 import { Wrapper } from './App.styles';
+import { ApplicationState } from './Redux';
+import { Store } from 'redux';
+import { Provider } from 'react-redux';
 import { ThemeProvider } from '@mui/material/styles';
-
-import { useSelector } from 'react-redux';
-import { RootState } from './Redux/Reducers';
+import { DarkMode } from './Redux/Types';
+import {connect} from "react-redux"
 import { lightTheme, darkTheme } from './Themes';
+import { CssBaseline } from '@mui/material';
 
-const App: React.FC = () => {
-  const darkMode = useSelector((state: RootState) => state.darkMode);
+interface MainProps {
+  store: Store<ApplicationState>;
+  data: DarkMode;
+  // loading: boolean;
+  // errors?: string;
+  // history: History;
+}
 
+const App: React.FC<MainProps> = ({ store, data }) => {
 
   return (
-    <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
-      <Wrapper>
-        {/*<CssBaseline />*/}
-        <BrowserRouter>
-          <AppBar />
-          <div className="container">
-            <Routes>
-              <Route path="home" element={<HomePage />} />
-              <Route path="login" element={<LoginPage />} />
-              <Route path="signup" element={<SignUpPage />} />
-              <Route path="/" element={<LandingPage />} />
-            </Routes>
-          </div>
-        </BrowserRouter>
-      </Wrapper>
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={data.darkMode ? darkTheme : lightTheme}>
+        <Wrapper>
+          <CssBaseline />
+          <BrowserRouter>
+            <AppBar />
+            <div className='container'>
+              {/*<ConnectedRouter history={history}>*/}
+
+              <Routes>
+                <Route path='home' element={<HomePage />} />
+                <Route path='login' element={<LoginPage />} />
+                <Route path='signup' element={<SignUpPage />} />
+                <Route path='/' element={<LandingPage />} />
+              </Routes>
+              {/*</ConnectedRouter>*/}
+            </div>
+          </BrowserRouter>
+        </Wrapper>
+      </ThemeProvider>
+    </Provider>
   );
 };
 
-export default App;
+const mapStateToProps = ({ darkMode }: ApplicationState) => ({
+  data: darkMode.data,
+  loading: darkMode.loading,
+  errors: darkMode.errors
+});
+
+const mapDispatchToProps = () => ({});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

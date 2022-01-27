@@ -16,18 +16,31 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 
 import { Search, SearchIconWrapper, StyledInputBase, MaterialUISwitch } from './AppBar.styles';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { actionCreators } from '../../Redux';
-import { RootState } from '../../Redux/Reducers';
+import { connect } from 'react-redux';
+import { toggleDarkMode } from '../../Redux/Actions';
+import { DarkMode } from '../../Redux/Types/';
+import { ApplicationState} from '../../Redux';
+import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from 'redux';
 import { ProjectEnum } from '../../Enums';
 
-export default function PrimarySearchAppBar() {
+interface PropsFromState {
+  data: DarkMode;
+  loading: boolean;
+  errors?: string;
+}
 
-  const darkMode = useSelector((state: RootState) => state.darkMode);
-  const dispatch = useDispatch();
+interface PropsFromDispatch {
+  toggleDarkMode: () => any;
+}
 
-  const { toggleDarkMode } = bindActionCreators(actionCreators, dispatch);
+type Props = PropsFromState & PropsFromDispatch
+// eslint-disable-next-line @typescript-eslint/no-shadow
+const PrimarySearchAppBar: React.FC<Props> = ({ data, toggleDarkMode }) => {
+
+  const ToggleDarkMode = () => {
+    toggleDarkMode();
+  };
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [
@@ -153,7 +166,7 @@ export default function PrimarySearchAppBar() {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
-            <MaterialUISwitch sx={{ m: 1 }} onChange={() => toggleDarkMode()} checked={darkMode} />
+            <MaterialUISwitch sx={{ m: 1 }} onChange={() => ToggleDarkMode()} checked={data.darkMode} />
             <IconButton
               size='large'
               edge='end'
@@ -184,4 +197,16 @@ export default function PrimarySearchAppBar() {
       {renderMenu}
     </Box>
   );
-}
+};
+const mapStateToProps = ({ darkMode }: ApplicationState) => ({
+  data: darkMode.data,
+  loading: darkMode.loading,
+  errors: darkMode.errors
+});
+const mapDispatchProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+  return {
+    toggleDarkMode: () => dispatch(toggleDarkMode()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchProps)(PrimarySearchAppBar);
