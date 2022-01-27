@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import { HomePage, LandingPage, LoginPage, SignUpPage } from './Pages';
 import { AppBar } from './Components';
-import { Wrapper } from './App.styles';
+import { Wrapper} from './App.styles';
 import { ApplicationState } from './Redux';
 import { Store } from 'redux';
 import { Provider } from 'react-redux';
@@ -28,10 +28,9 @@ const App: React.FC<MainProps> = ({ store, data }) => {
       <ThemeProvider theme={data.darkMode ? darkTheme : lightTheme}>
         <Wrapper>
           <CssBaseline />
+            <AppBar >
+
           <BrowserRouter>
-            <AppBar />
-            <div className='container'>
-              {/*<ConnectedRouter history={history}>*/}
 
               <Routes>
                 <Route path='home' element={<HomePage />} />
@@ -39,9 +38,8 @@ const App: React.FC<MainProps> = ({ store, data }) => {
                 <Route path='signup' element={<SignUpPage />} />
                 <Route path='/' element={<LandingPage />} />
               </Routes>
-              {/*</ConnectedRouter>*/}
-            </div>
           </BrowserRouter>
+            </AppBar>
         </Wrapper>
       </ThemeProvider>
     </Provider>

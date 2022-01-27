@@ -2,7 +2,6 @@ import {alpha, styled} from '@mui/material/styles'
 import {Paper, Switch, InputBase} from '@mui/material'
 
 export const Wrapper = styled(Paper)`
-
 `;
 
 export const Search = styled('div')(({theme})=> ({

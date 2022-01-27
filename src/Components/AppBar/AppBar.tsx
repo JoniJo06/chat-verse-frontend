@@ -14,7 +14,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 
-import { Search, SearchIconWrapper, StyledInputBase, MaterialUISwitch } from './AppBar.styles';
+import { Search, SearchIconWrapper, StyledInputBase, MaterialUISwitch} from './AppBar.styles';
 
 import { connect } from 'react-redux';
 import { toggleDarkMode } from '../../Redux/Actions';
@@ -36,7 +36,7 @@ interface PropsFromDispatch {
 
 type Props = PropsFromState & PropsFromDispatch
 // eslint-disable-next-line @typescript-eslint/no-shadow
-const PrimarySearchAppBar: React.FC<Props> = ({ data, toggleDarkMode }) => {
+const PrimarySearchAppBar: React.FC<Props> = ({ data, toggleDarkMode , children}) => {
 
   const ToggleDarkMode = () => {
     toggleDarkMode();
@@ -129,8 +129,9 @@ const PrimarySearchAppBar: React.FC<Props> = ({ data, toggleDarkMode }) => {
   );
 
   return (
+
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position='static'>
+      <AppBar position='sticky'>
         <Toolbar>
           <IconButton
             size='large' edge='start' color='inherit' aria-label='open drawer' sx={{ mr: 2 }}
@@ -195,6 +196,7 @@ const PrimarySearchAppBar: React.FC<Props> = ({ data, toggleDarkMode }) => {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      {children}
     </Box>
   );
 };
