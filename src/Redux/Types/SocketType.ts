@@ -1,8 +1,8 @@
 import { Socket as Sockets } from 'socket.io-client'
-import { ServerToClientEvents, ClientToServerEvents } from '../../Types'
+//import { ServerToClientEvents, ClientToServerEvents } from '../../Types'
 
 export interface Socket {
-    socket: Sockets<ServerToClientEvents, ClientToServerEvents>
+    socket: Sockets
 }
 
 export enum SocketActionTypes {

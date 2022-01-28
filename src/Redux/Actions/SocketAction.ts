@@ -4,11 +4,11 @@ import { ActionCreator, Action, Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 
 import { ApplicationState } from '../index';
-
-export type AppThunk = ThunkAction<void,
-  ApplicationState,
-  null,
-  Action<string>>;
+//
+// export type AppThunk = ThunkAction<void,
+//   ApplicationState,
+//   null,
+//   Action<string>>;
 
 export const setSocket: ActionCreator<ThunkAction<void,
   ApplicationState,

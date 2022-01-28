@@ -5,10 +5,10 @@ import { ThunkAction } from 'redux-thunk';
 
 import { ApplicationState } from '../index';
 
-export type AppThunk = ThunkAction<void,
-  ApplicationState,
-  null,
-  Action<string>>;
+// export type AppThunk = ThunkAction<void,
+//   ApplicationState,
+//   null,
+//   Action<string>>;
 
 export const setUserStatus: ActionCreator<ThunkAction<void,
   ApplicationState,
