@@ -14,6 +14,7 @@ const reducer: Reducer<DarkModeState> = (
   action) => {
   switch (action.type) {
     case DarkModeActionTypes.TOGGLE_DARK_MODE:
+      localStorage.setItem('darkMode', `${!state.data.darkMode}`)
       return {
         error: state.errors,
         loading: state.loading,
