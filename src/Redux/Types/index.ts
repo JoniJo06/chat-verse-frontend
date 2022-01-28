@@ -4,3 +4,5 @@ export type { UserToken, UserTokenState } from './TokenType';
 export { UserTokenActionTypes } from './TokenType';
 export type { UserStatus, UserStatusState } from './UserStatusType';
 export { UserStatusActionTypes } from './UserStatusType';
+export type { Socket, SocketState } from './SocketType'
+export { SocketActionTypes } from './SocketType';
