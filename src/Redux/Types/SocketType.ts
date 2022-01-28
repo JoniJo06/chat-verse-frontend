@@ -1,9 +1,5 @@
-import { Socket as Sockets } from 'socket.io-client'
-//import { ServerToClientEvents, ClientToServerEvents } from '../../Types'
-
-export interface Socket {
-    socket: Sockets
-}
+import { Socket } from 'socket.io-client';
+interface Sockets{socket: Socket}
 
 export enum SocketActionTypes {
     SET_SOCKET = '@@socket/SET_SOCKET',
@@ -14,6 +10,6 @@ export enum SocketActionTypes {
 
 export interface SocketState {
     readonly loading: boolean;
-    readonly data: Socket;
+    readonly data: Sockets;
     readonly errors?: string;
 }
