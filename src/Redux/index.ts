@@ -1,13 +1,13 @@
 // export * as actionCreators from './Actions'
 import {combineReducers} from 'redux'
-import {darkModeReducer, userTokenReducer, userStatusReducer, socketReducer } from './Reducers';
+import {darkModeReducer, userTokenReducer, userReducer, socketReducer } from './Reducers';
 
-import { DarkModeState, SocketState, UserStatusState, UserTokenState} from './Types';
+import { DarkModeState, SocketState, UserState, UserTokenState} from './Types';
 import { connectRouter, RouterState } from 'connected-react-router';
 
 export interface ApplicationState {
   darkMode: DarkModeState,
-  userStatus: UserStatusState,
+  user: UserState,
   userToken: UserTokenState,
   socket: SocketState,
   router: RouterState
@@ -17,7 +17,7 @@ export const createRootReducer = (history: History) =>
   combineReducers({
     darkMode: darkModeReducer,
     userToken: userTokenReducer,
-    userStatus: userStatusReducer,
+    user: userReducer,
     socket: socketReducer,
     router: connectRouter(history)
   });

@@ -1,4 +1,4 @@
 export { toggleDarkMode } from './DarkModeAction'
 export { setUserToken, removeUserToken} from './UserTokenAction'
-export { setUserStatus, removeUserStatus} from './UserStatusAction'
+export { setUser, removeUser} from './UserAction'
 export { setSocket, removeSocket } from './SocketAction'

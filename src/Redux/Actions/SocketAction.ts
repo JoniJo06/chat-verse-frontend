@@ -1,4 +1,4 @@
-import { SocketActionTypes, Socket } from '../Types';
+import { SocketActionTypes} from '../Types';
 
 import { ActionCreator, Action, Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
@@ -12,19 +12,19 @@ import { ApplicationState } from '../index';
 
 export const setSocket: ActionCreator<ThunkAction<void,
   ApplicationState,
-  Socket,
-  Action<string>>> = (socket: Socket) => {
+  string,
+  Action<string>>> = (user_id: string) => {
   return (dispatch: Dispatch): Action => {
     try {
       return dispatch({
         type: SocketActionTypes.SET_SOCKET,
-        payload: socket,
+        payload: user_id,
       });
 
     } catch (err) {
       return dispatch({
-        type: SocketActionTypes.SET_SOCKET,
-        payload: null,
+        type: SocketActionTypes.SET_SOCKET_FAILURE,
+        payload: err,
       });
     }
   };
@@ -32,7 +32,7 @@ export const setSocket: ActionCreator<ThunkAction<void,
 
 export const removeSocket: ActionCreator<ThunkAction<void,
   ApplicationState,
-  Socket,
+  string,
   Action<string>>> = () => {
   return (dispatch: Dispatch): Action => {
     try {
@@ -44,7 +44,7 @@ export const removeSocket: ActionCreator<ThunkAction<void,
     } catch (err) {
       return dispatch({
         type: SocketActionTypes.REMOVE_SOCKET_FAILURE,
-        payload: null,
+        payload: err,
       });
     }
   };

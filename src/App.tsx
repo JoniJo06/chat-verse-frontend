@@ -36,16 +36,16 @@ const App: React.FC<AllProps> = ({ store, darkMode }) => {
       <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
         <Wrapper>
           <CssBaseline />
-          <AppBar>
             <BrowserRouter>
+          <AppBar>
               <Routes>
                 <Route path='home' element={<HomePage />} />
                 <Route path='login' element={<LoginPage />} />
                 <Route path='signup' element={<SignUpPage />} />
                 <Route path='/' element={<LandingPage />} />
               </Routes>
-            </BrowserRouter>
           </AppBar>
+            </BrowserRouter>
         </Wrapper>
       </ThemeProvider>
     </Provider>

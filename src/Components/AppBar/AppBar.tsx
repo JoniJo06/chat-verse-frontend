@@ -1,12 +1,5 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Badge from '@mui/material/Badge';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
+import {AppBar, Box,Toolbar,IconButton,Typography,Badge, MenuItem, Menu} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
@@ -23,6 +16,7 @@ import { ApplicationState} from '../../Redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import { ProjectEnum } from '../../Enums';
+import {useNavigate} from "react-router-dom";
 
 interface PropsFromState {
   data: DarkMode;
@@ -50,6 +44,7 @@ const PrimarySearchAppBar: React.FC<Props> = ({ data, toggleDarkMode , children}
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const navigate = useNavigate()
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -80,7 +75,8 @@ const PrimarySearchAppBar: React.FC<Props> = ({ data, toggleDarkMode , children}
     }} open={isMenuOpen} onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleMenuClose}>Mein account</MenuItem>
+      <MenuItem onClick={()=>navigate('/login')}>Login</MenuItem>
     </Menu>
   );
 

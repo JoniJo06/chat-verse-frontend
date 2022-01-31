@@ -5,9 +5,10 @@ import { ChatType } from '../../Types';
 import { ApplicationState } from '../../Redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
-import { setUserStatus, setUserToken } from '../../Redux/Actions';
+import { setUser, setUserToken } from '../../Redux/Actions';
 import { connect } from 'react-redux';
 import { ChatCard } from '../index';
+import {User} from "../../Redux/Types";
 
 type MainProps = {
   chat: ChatType;
@@ -15,10 +16,8 @@ type MainProps = {
 };
 
 interface PropsFromState {
-  userStatus: string;
-  userStatusLoading: boolean;
+  user: User;
   userToken: string;
-  userTokenLoading: boolean;
 }
 
 type AllProps = PropsFromState & MainProps;
@@ -45,17 +44,15 @@ const ChatCollection: React.FC<AllProps> = ({ userToken, chat, setChat }) => {
     </Wrapper>
   );
 };
-const mapStateToProps = ({ userStatus, userToken }: ApplicationState) => ({
-  userStatus: userStatus.data.userStatus,
-  userStatusLoading: userStatus.loading,
+const mapStateToProps = ({ user, userToken }: ApplicationState) => ({
+  user: user.data,
   userToken: userToken.data.userToken,
-  userTokenLoading: userToken.loading,
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
   return {
     setUserToken: (token: string) => dispatch(setUserToken(token)),
-    setUserStatus: (status: string) => dispatch(setUserStatus(status)),
+    setUserStatus: (status: string) => dispatch(setUser(status)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ChatCollection);

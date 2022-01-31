@@ -14,11 +14,11 @@ import { LockOutlined as LockOutlinedIcon } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
 import { ApplicationState } from '../../Redux';
-// import { UserToken } from '../../Redux/Types';
+import {User} from '../../Redux/Types';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
-import { setUserToken, setUserStatus } from '../../Redux/Actions';
+import {setUserToken, setUser, setSocket} from '../../Redux/Actions';
 
 const paperStyle = {
   padding: 20,
@@ -35,20 +35,19 @@ type LoginFormData = {
 };
 
 interface PropsFromState {
-  userStatus: string;
-  userStatusLoading: boolean;
-  errors?: string;
+  user: User;
 }
 
 interface PropsFromDispatch {
   setUserToken: (token: string) => void;
-  setUserStatus: (status: string) => void;
+  setUser: (status: string, user_id: string) => void;
+  setSocket: (user_id: string) => void
 }
 
 type AllProps = PropsFromState & PropsFromDispatch
 
 // eslint-disable-next-line @typescript-eslint/no-shadow
-const LoginPage: React.FC<AllProps> = ({ userStatus, setUserToken, setUserStatus }) => {
+const LoginPage: React.FC<AllProps> = ({ user, setUserToken, setUser, setSocket }) => {
   const [formData, setFormData] = useState<LoginFormData>({
     username: '',
     password: '',
@@ -59,8 +58,7 @@ const LoginPage: React.FC<AllProps> = ({ userStatus, setUserToken, setUserStatus
 
   useEffect(() => {
     const fn = async () => {
-      if (userStatus)
-        navigate('/home');
+      if (user.status) navigate('/home');
     };
     void fn();
   }, []);
@@ -81,7 +79,8 @@ const LoginPage: React.FC<AllProps> = ({ userStatus, setUserToken, setUserStatus
       })
       .then((res) => {
         setUserToken(res.data.token);
-        setUserStatus(res.data.status);
+        setUser(res.data.status, res.data._id);
+        setSocket(res.data._id)
         navigate('/home');
       })
       .catch((err) => console.log(err.message));
@@ -162,15 +161,15 @@ const LoginPage: React.FC<AllProps> = ({ userStatus, setUserToken, setUserStatus
   );
 };
 
-const mapStateToProps = ({ userStatus }: ApplicationState) => ({
-  userStatus: userStatus.data.userStatus,
-  userStatusLoading: userStatus.loading,
+const mapStateToProps = ({ user }: ApplicationState) => ({
+  user: user.data,
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
   return {
     setUserToken: (token: string) => dispatch(setUserToken(token)),
-    setUserStatus: (status: string) => dispatch(setUserStatus(status)),
+    setUser: (status: string, user_id: string) => dispatch(setUser(status, user_id)),
+    setSocket: (user_id:string) => dispatch(setSocket(user_id))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);

@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Wrapper } from './ChatCard.styles';
+import {} from './ChatCard.styles';
 import { ChatType } from '../../Types';
 import axios from 'axios';
 import { ApplicationState } from '../../Redux';
 import { connect } from 'react-redux';
+import {Button} from '@mui/material'
+import {Socket, User} from "../../Redux/Types";
+import {createChat} from '../../Socket'
 
 interface PropsFromState {
   userToken: string;
-  userTokenLoading: boolean;
+  socket: Socket
+  user: User
 }
 
 interface MainProps {
@@ -16,7 +20,7 @@ interface MainProps {
 
 type AllProps = MainProps & PropsFromState
 
-const ChatCard: React.FC<AllProps> = ({ chat_id, userToken }) => {
+const ChatCard: React.FC<AllProps> = ({ chat_id, userToken , socket, user}) => {
   const [chat, setChat] = useState<ChatType>();
 
   useEffect(() => {
@@ -27,15 +31,18 @@ const ChatCard: React.FC<AllProps> = ({ chat_id, userToken }) => {
     };
     void fetchData();
   }, []);
+
+
   return (
-    <Wrapper>
+    <Button onClick={() => createChat(socket, chat_id, user.user_id)}>
       {chat?.name}
-    </Wrapper>
+    </Button>
   );
 };
-const mapStateToProps = ({ userToken }: ApplicationState) => ({
-  userToken: userToken.data.userToken,
-  userTokenLoading: userToken.loading,
+const mapStateToProps = ({ userToken, socket, user }: ApplicationState) => ({
+ userToken: userToken.data.userToken,
+  socket: socket.data,
+  user: user.data
 });
 
 const mapDispatchToProps = () => ({});

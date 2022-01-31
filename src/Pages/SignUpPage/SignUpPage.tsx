@@ -22,8 +22,9 @@ import axios from 'axios';
 import { ApplicationState } from '../../Redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
-import { setUserStatus, setUserToken } from '../../Redux/Actions';
+import { setUser, setUserToken } from '../../Redux/Actions';
 import { connect } from 'react-redux';
+import {User} from "../../Redux/Types";
 // import { bindActionCreators } from 'redux';
 // import { actionCreators } from '../../Redux';
 
@@ -48,21 +49,20 @@ type SignUpFormData = {
 };
 
 interface PropsFromState {
-  userStatus: string;
-  userStatusLoading: boolean;
-  errors?: string;
+  user: User;
+  userToken: string
 }
 
 interface PropsFromDispatch {
   setUserToken: (token: string) => void;
-  setUserStatus: (status: string) => void;
+  setUser: (status: string, user_id :string) => void;
 }
 
 type AllProps = PropsFromState & PropsFromDispatch
 
 
 // eslint-disable-next-line @typescript-eslint/no-shadow
-const SignUpPage: React.FC<AllProps> = ({setUserStatus, setUserToken, userStatus}) => {
+const SignUpPage: React.FC<AllProps> = ({ setUser, setUserToken, user, userToken}) => {
   const [formData, setFormData] = useState<SignUpFormData>({
     first_name: '',
     last_name: '',
@@ -74,12 +74,14 @@ const SignUpPage: React.FC<AllProps> = ({setUserStatus, setUserToken, userStatus
     retype_password: '',
   });
 
+  console.log(userToken)
+
   const theme = useTheme();
   const navigate = useNavigate();
 
   useEffect(() => {
     const fn = async () => {
-      if(userStatus)
+      if(user.status)
         navigate('/home')
     }
     fn();
@@ -91,7 +93,7 @@ const SignUpPage: React.FC<AllProps> = ({setUserStatus, setUserToken, userStatus
     });
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSignUp = (e: any) => {
     console.log(process.env.REACT_APP_BACKEND_URL);
     e.preventDefault();
 
@@ -108,7 +110,7 @@ const SignUpPage: React.FC<AllProps> = ({setUserStatus, setUserToken, userStatus
         })
         .then((res) => {
           setUserToken(res.data.token);
-          setUserStatus(res.data.status);
+          setUser(res.data.status, res.data.user_id);
           navigate('/home');
         })
         .catch((err) => console.log(err.message));
@@ -126,7 +128,7 @@ const SignUpPage: React.FC<AllProps> = ({setUserStatus, setUserToken, userStatus
   return (
     <Grid container padding='20px'>
       <Paper elevation={10} style={paperStyle}>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSignUp}>
           <Grid item style={{ display: 'grid', placeItems: 'center' }}>
             <Avatar style={avatarStyle}>
               <LockOutlinedIcon />
@@ -267,15 +269,15 @@ const SignUpPage: React.FC<AllProps> = ({setUserStatus, setUserToken, userStatus
     </Grid>
   );
 };
-const mapStateToProps = ({ userStatus }: ApplicationState) => ({
-  userStatus: userStatus.data.userStatus,
-  userStatusLoading: userStatus.loading,
+const mapStateToProps = ({ user, userToken }: ApplicationState) => ({
+  user: user.data,
+  userToken: userToken.data.userToken
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
   return {
     setUserToken: (token: string) => dispatch(setUserToken(token)),
-    setUserStatus: (status: string) => dispatch(setUserStatus(status)),
+    setUser: (status: string, user_id :string) => dispatch(setUser(status, user_id)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(SignUpPage);
