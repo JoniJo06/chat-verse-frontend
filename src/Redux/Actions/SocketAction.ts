@@ -1,8 +1,7 @@
-import { SocketActionTypes} from '../Types';
-
+import { SocketActionTypes } from '../Types';
 import { ActionCreator, Action, Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-
+// import { Socket } from 'socket.io-client';
 import { ApplicationState } from '../index';
 //
 // export type AppThunk = ThunkAction<void,

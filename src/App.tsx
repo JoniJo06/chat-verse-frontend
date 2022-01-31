@@ -10,11 +10,9 @@ import { ThemeProvider } from '@mui/material/styles';
 import { connect } from 'react-redux';
 import { lightTheme, darkTheme } from './Themes';
 import { CssBaseline } from '@mui/material';
-import { Socket } from './Redux/Types';
 import { ThunkDispatch } from 'redux-thunk';
 import { setSocket } from './Redux/Actions';
-// import { ServerToClientEvents, ClientToServerEvents } from './Types'
-import { Socket as Sockets } from 'socket.io-client';
+import { Socket } from 'socket.io-client';
 interface MainProps {
   store: Store<ApplicationState>;
 }
@@ -25,7 +23,7 @@ interface PropsFromDispatch {
 
 interface PropsFromState {
   darkMode: boolean;
-  socket: Sockets;
+  socket: Socket;
 }
 
 type AllProps = MainProps & PropsFromDispatch & PropsFromState;

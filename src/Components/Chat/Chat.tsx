@@ -6,6 +6,7 @@ import { Socket, User} from "../../Redux/Types";
 import {ApplicationState} from "../../Redux";
 import {connect} from "react-redux";
 
+
 interface MainProps {
   chat: ChatType
 }
