@@ -80,6 +80,7 @@ const LoginPage: React.FC<AllProps> = ({ user, setUserToken, setUser, setSocket 
       .then((res) => {
         setUserToken(res.data.token);
         setUser(res.data.status, res.data._id);
+        console.log(res.data._id)
         setSocket(res.data._id)
         navigate('/home');
       })

@@ -16,11 +16,13 @@ interface PropsFromState {
 
 interface MainProps {
   chat_id: string;
+  setCurrentChat: Function;
+  active: boolean
 }
 
 type AllProps = MainProps & PropsFromState
 
-const ChatCard: React.FC<AllProps> = ({ chat_id, userToken , socket, user}) => {
+const ChatCard: React.FC<AllProps> = ({ chat_id,setCurrentChat, userToken , socket, user}) => {
   const [chat, setChat] = useState<ChatType>();
 
   useEffect(() => {
@@ -34,7 +36,11 @@ const ChatCard: React.FC<AllProps> = ({ chat_id, userToken , socket, user}) => {
 
 
   return (
-    <Button onClick={() => createChat(socket, chat_id, user.user_id)}>
+    <Button onClick={() => {
+      createChat(socket, chat_id, user.user_id)
+      console.log(chat)
+      setCurrentChat(chat)
+    }}>
       {chat?.name}
     </Button>
   );

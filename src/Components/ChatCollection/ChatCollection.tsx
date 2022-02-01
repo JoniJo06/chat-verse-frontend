@@ -11,8 +11,8 @@ import { ChatCard } from '../index';
 import {User} from "../../Redux/Types";
 
 type MainProps = {
-  chat: ChatType;
-  setChat: (chat: ChatType) => void;
+  currentChat: ChatType;
+  setCurrentChat: (chat: ChatType) => void;
 };
 
 interface PropsFromState {
@@ -23,12 +23,12 @@ interface PropsFromState {
 type AllProps = PropsFromState & MainProps;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ChatCollection: React.FC<AllProps> = ({ userToken, chat, setChat }) => {
+const ChatCollection: React.FC<AllProps> = ({ userToken,currentChat, setCurrentChat }) => {
   const [chats, setChats] = useState<string[]>();
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
       await axios
-        .get(process.env.REACT_APP_BACKEND_URL + '/users/allactivechats', {
+        .get(process.env.REACT_APP_BACKEND_URL + '/users/all-active-chats', {
           headers: { JWT_TOKEN: userToken },
         })
         .then((res) => setChats(res.data.chats))
@@ -38,8 +38,8 @@ const ChatCollection: React.FC<AllProps> = ({ userToken, chat, setChat }) => {
 
   return (
     <Wrapper>
-      {chats?.map((el, i) => {
-        return <ChatCard key={i} chat_id={el} />;
+      {chats?.map((chat_id, i) => {
+        return <ChatCard setCurrentChat={setCurrentChat} active={currentChat.chat_id === chat_id} key={i} chat_id={chat_id} />;
       })}
     </Wrapper>
   );

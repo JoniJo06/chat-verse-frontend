@@ -50,7 +50,7 @@ const HomePage: React.FC<AllProps> = ({ user/*, socket*//*, userToken*/}) => {
         <Wrapper>
           <TopicCollection />
           <Chat chat={currentChat} />
-          <ChatCollection chat={currentChat} setChat={setCurrentChat} />
+          <ChatCollection currentChat={currentChat} setCurrentChat={setCurrentChat} />
         </Wrapper>
       )}
     </React.Fragment>

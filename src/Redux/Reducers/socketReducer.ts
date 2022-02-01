@@ -22,7 +22,7 @@ const reducer: Reducer<SocketState> = (
         error: state.errors,
         loading: state.loading,
         data: {
-          socket: state.data.socket = io(String(process.env.REACT_APP_SOCKET_URL), { query: {user_id: action.payload.user_id}}),
+          socket: state.data.socket = io(String(process.env.REACT_APP_SOCKET_URL), { query: {user_id: action.payload}}),
         },
       };
     case SocketActionTypes.SET_SOCKET_FAILURE:
