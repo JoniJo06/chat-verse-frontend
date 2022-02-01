@@ -1,4 +1,4 @@
-import React, {useRef} from 'react'
+import React, {FormEvent,  useRef} from 'react'
 import { Wrapper } from './Chat.styles';
 import {ChatType} from '../../Types'
 import {sendSingleMessage} from '../../Socket'
@@ -23,7 +23,8 @@ type AllProps = MainProps & PropsFromState & PropsFromDispatch
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Chat: React.FC<AllProps> = ({chat, socket, user}) => {
   const newMessageRef = useRef()
-  const handleNewMessage = () => {
+  const handleNewMessage = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     //@ts-ignore
     const message = newMessageRef.current.value;
     sendSingleMessage(
