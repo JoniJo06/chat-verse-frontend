@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {} from './ChatCard.styles';
+import {Wrapper} from './ChatCard.styles';
 import { ChatType } from '../../Types';
 import axios from 'axios';
 import { ApplicationState } from '../../Redux';
@@ -36,6 +36,8 @@ const ChatCard: React.FC<AllProps> = ({ chat_id,setCurrentChat, userToken , sock
 
 
   return (
+    <Wrapper>
+
     <Button onClick={() => {
       createChat(socket, chat_id, user.user_id)
       console.log(chat)
@@ -43,6 +45,7 @@ const ChatCard: React.FC<AllProps> = ({ chat_id,setCurrentChat, userToken , sock
     }}>
       {chat?.name}
     </Button>
+    </Wrapper>
   );
 };
 const mapStateToProps = ({ userToken, socket, user }: ApplicationState) => ({

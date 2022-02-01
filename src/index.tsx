@@ -11,6 +11,9 @@ import App from './App'
 const initialState: any = {}
 const store = configureStore(history, initialState)
 ReactDOM.render(
-      <App store={store} /*history={history}*//>,
+  <React.StrictMode>
+
+      <App store={store} />
+  </React.StrictMode>,
   document.getElementById('root')
 )
