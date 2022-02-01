@@ -1,11 +1,15 @@
-import React, {FormEvent, useRef, useState} from 'react';
-import {Wrapper} from './Chat.styles';
-import {ChatType, SingleMessageType} from '../../Types';
-import {sendSingleMessage} from '../../Socket';
-import {Socket, User} from '../../Redux/Types';
-import {ApplicationState} from '../../Redux';
-import {connect} from 'react-redux';
-import axios from "axios";
+import React, { FormEvent, useRef, useState } from 'react';
+import { Wrapper } from './Chat.styles';
+import { ChatType, SingleMessageType } from '../../Types';
+import { sendSingleMessage } from '../../Socket';
+import { Socket, User } from '../../Redux/Types';
+import { ApplicationState } from '../../Redux';
+import { connect } from 'react-redux';
+import axios from 'axios';
+import InputField from '@mui/material/TextField';
+import SendIcon from '@mui/icons-material/Send';
+import Stack from '@mui/material/Stack';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 interface MainProps {
   chat: ChatType;
@@ -16,13 +20,12 @@ interface PropsFromState {
   user: User;
 }
 
-interface PropsFromDispatch {
-}
+interface PropsFromDispatch {}
 
 type AllProps = MainProps & PropsFromState & PropsFromDispatch;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const Chat: React.FC<AllProps> = ({chat, socket, user}) => {
+const Chat: React.FC<AllProps> = ({ chat, socket, user }) => {
   const [messages, setMessages] = useState<SingleMessageType[]>([]);
   const newMessageRef = useRef(null);
   const handleNewMessage = (e: FormEvent<HTMLFormElement>) => {
@@ -34,17 +37,20 @@ const Chat: React.FC<AllProps> = ({chat, socket, user}) => {
       chat_id: chat.chat_id,
       creator: user.user_id,
       timestamp: Date.now(),
-      read_status: false
-    }
+      read_status: false,
+    };
 
     sendSingleMessage(socket, message);
 
     setMessages((prev) => [...prev, message]);
 
     //TODO
-    void axios.post(String(process.env.REACT_APP_BACKEND_URL + '/single-messages'), {
-      message
-    })
+    void axios.post(
+      String(process.env.REACT_APP_BACKEND_URL + '/single-messages'),
+      {
+        message,
+      }
+    );
     // .then(console.log('message sendec'))
     // .catch(err => console.warn(err.message))
     //@ts-ignore
@@ -53,15 +59,31 @@ const Chat: React.FC<AllProps> = ({chat, socket, user}) => {
   return (
     <Wrapper>
       {messages?.map((el, i) => {
-        return <p key={i}>{el.message}</p>
+        return <p key={i}>{el.message}</p>;
       })}
       <form onSubmit={handleNewMessage}>
-        <input ref={newMessageRef}/>
+        <Stack direction='row' spacing={2}>
+          <InputField
+            fullWidth
+            label='new message'
+            id='fullWidth'
+            ref={newMessageRef}
+          />
+                <LoadingButton
+        onClick={() => console.log('kek')}
+        endIcon={<SendIcon />}
+        loading={false}
+        loadingPosition="end"
+        variant="contained"
+      >
+        Send
+      </LoadingButton>
+        </Stack>
       </form>
     </Wrapper>
   );
 };
-const mapStateToProps = ({user, socket}: ApplicationState) => ({
+const mapStateToProps = ({ user, socket }: ApplicationState) => ({
   user: user.data,
   socket: socket.data,
 });
