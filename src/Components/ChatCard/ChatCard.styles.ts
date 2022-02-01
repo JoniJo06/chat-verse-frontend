@@ -1,7 +1,8 @@
 import { styled } from '@mui/material/styles';
-import { Paper } from '@mui/material';
+import { Button } from '@mui/material';
 
-export const Wrapper = styled(Paper)({
+export const Wrapper = styled(Button)({
   margin: 0,
+  width: '100%',
 });
 
