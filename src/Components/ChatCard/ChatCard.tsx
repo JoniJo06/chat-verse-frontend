@@ -4,9 +4,10 @@ import { ChatType } from '../../Types';
 import axios from 'axios';
 import { ApplicationState } from '../../Redux';
 import { connect } from 'react-redux';
-import {Button} from '@mui/material'
+import {Avatar/*, Typography*/} from '@mui/material'
 import {Socket, User} from "../../Redux/Types";
 import {createChat} from '../../Socket'
+import {} from '@mui/icons-material'
 
 interface PropsFromState {
   userToken: string;
@@ -23,7 +24,12 @@ interface MainProps {
 type AllProps = MainProps & PropsFromState
 
 const ChatCard: React.FC<AllProps> = ({ chat_id,setCurrentChat, userToken , socket, user}) => {
-  const [chat, setChat] = useState<ChatType>();
+  const [chat, setChat] = useState<ChatType>({
+    chat_id: '',
+    icon: '',
+    chat_partner: '',
+    name: ''
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,17 +40,53 @@ const ChatCard: React.FC<AllProps> = ({ chat_id,setCurrentChat, userToken , sock
     void fetchData();
   }, []);
 
+  const stringToColor = (string: string) => {
+    let hash = 0;
+    let i;
 
+    /* eslint-disable no-bitwise */
+    for (i = 0; i < string.length; i += 1) {
+      hash = string.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    let color = '#';
+
+    for (i = 0; i < 3; i += 1) {
+      const value = (hash >> (i * 8)) & 0xff;
+      color += `00${value.toString(16)}`.substr(-2);
+    }
+    /* eslint-enable no-bitwise */
+
+    return color;
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const stringAvatar = (name: string) => {
+    const twoWords :boolean = name.split(' ').length >= 2;
+    return {
+      sx: {
+        bgcolor: stringToColor(name),
+        width: 30,
+        height: 30
+      },
+
+      children: `${name.split(' ')[0][0]}${twoWords ? name.split(' ')[1][0]: ''}`,
+    };
+  }
+
+  // @ts-ignore
   return (
-    <Wrapper>
-
-    <Button onClick={() => {
+    <Wrapper onClick={() => {
       createChat(socket, chat_id, user.user_id)
       console.log(chat)
       setCurrentChat(chat)
     }}>
+      {chat?.icon ? (
+        <Avatar sx={{ width: 24, height: 24 }} alt={chat.name} src={chat.icon} />
+      ) : (
+        <Avatar  {...stringAvatar(chat.name)} />
+      )}
       {chat?.name}
-    </Button>
+
     </Wrapper>
   );
 };
