@@ -1,4 +1,4 @@
-import React, { FormEvent, useRef, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { Wrapper } from './Chat.styles';
 import { ChatType, SingleMessageType } from '../../Types';
 import { sendSingleMessage } from '../../Socket';
@@ -10,6 +10,10 @@ import InputField from '@mui/material/TextField';
 import SendIcon from '@mui/icons-material/Send';
 import Stack from '@mui/material/Stack';
 import LoadingButton from '@mui/lab/LoadingButton';
+
+type MessageFormData = {
+  message: string;
+};
 
 interface MainProps {
   chat: ChatType;
@@ -27,23 +31,20 @@ type AllProps = MainProps & PropsFromState & PropsFromDispatch;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Chat: React.FC<AllProps> = ({ chat, socket, user }) => {
   const [messages, setMessages] = useState<SingleMessageType[]>([]);
-  const newMessageRef = useRef(null);
+  const [formData, setFormData] = useState<MessageFormData>({ message: '' });
+
   const handleNewMessage = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // @ts-ignore
-    const newMessage = newMessageRef.current.value;
+    if (!formData.message.trim()) return;
     const message: SingleMessageType = {
-      message: newMessage,
+      message: formData.message,
       chat_id: chat.chat_id,
       creator: user.user_id,
       timestamp: Date.now(),
       read_status: false,
     };
-
     sendSingleMessage(socket, message);
-
     setMessages((prev) => [...prev, message]);
-
     //TODO
     void axios.post(
       String(process.env.REACT_APP_BACKEND_URL + '/single-messages'),
@@ -53,9 +54,21 @@ const Chat: React.FC<AllProps> = ({ chat, socket, user }) => {
     );
     // .then(console.log('message sendec'))
     // .catch(err => console.warn(err.message))
-    //@ts-ignore
-    newMessageRef.current.value = '';
+    setFormData((prev) => {
+      let temp = prev;
+      Object.keys(temp).forEach((param: string) => {
+        temp = { ...temp, [param]: '' };
+      });
+      return temp;
+    });
   };
+
+  const handleChange = (e: any) => {
+    setFormData((prev) => {
+      return { ...prev, [e.target.name]: e.target.value };
+    });
+  };
+
   return (
     <Wrapper>
       {messages?.map((el, i) => {
@@ -64,20 +77,22 @@ const Chat: React.FC<AllProps> = ({ chat, socket, user }) => {
       <form onSubmit={handleNewMessage}>
         <Stack direction='row' spacing={2}>
           <InputField
+            name='message'
+            onChange={handleChange}
+            value={formData.message}
             fullWidth
             label='new message'
             id='fullWidth'
-            ref={newMessageRef}
           />
-                <LoadingButton
-        onClick={() => console.log('kek')}
-        endIcon={<SendIcon />}
-        loading={false}
-        loadingPosition="end"
-        variant="contained"
-      >
-        Send
-      </LoadingButton>
+          <LoadingButton
+            type='submit'
+            endIcon={<SendIcon />}
+            loading={false}
+            loadingPosition='end'
+            variant='contained'
+          >
+            Send
+          </LoadingButton>
         </Stack>
       </form>
     </Wrapper>
