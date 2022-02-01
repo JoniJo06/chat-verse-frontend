@@ -66,7 +66,8 @@ const ChatCard: React.FC<AllProps> = ({ chat_id,setCurrentChat, userToken , sock
       sx: {
         bgcolor: stringToColor(name),
         width: 30,
-        height: 30
+        height: 30,
+        mr: '5px',
       },
 
       children: `${name.split(' ')[0][0]}${twoWords ? name.split(' ')[1][0]: ''}`,
@@ -81,7 +82,7 @@ const ChatCard: React.FC<AllProps> = ({ chat_id,setCurrentChat, userToken , sock
       setCurrentChat(chat)
     }}>
       {chat?.icon ? (
-        <Avatar sx={{ width: 24, height: 24 }} alt={chat.name} src={chat.icon} />
+        <Avatar sx={{ width: 24, height: 24, mr: '5px' }} alt={chat.name} src={chat.icon} />
       ) : (
         <Avatar  {...stringAvatar(chat.name)} />
       )}
