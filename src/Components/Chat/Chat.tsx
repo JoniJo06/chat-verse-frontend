@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useState, useRef } from 'react';
 import { Wrapper } from './Chat.styles';
 import { ChatType, SingleMessageType } from '../../Types';
 import { sendSingleMessage } from '../../Socket';
@@ -10,6 +10,7 @@ import InputField from '@mui/material/TextField';
 import SendIcon from '@mui/icons-material/Send';
 import Stack from '@mui/material/Stack';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { Paper } from '@mui/material';
 
 type MessageFormData = {
   message: string;
@@ -32,6 +33,9 @@ type AllProps = MainProps & PropsFromState & PropsFromDispatch;
 const Chat: React.FC<AllProps> = ({ chat, socket, user }) => {
   const [messages, setMessages] = useState<SingleMessageType[]>([]);
   const [formData, setFormData] = useState<MessageFormData>({ message: '' });
+  
+  const dummyDiv = useRef(null)
+  // const scrollBottom = () => dummyDiv.current.scrolltoBottom
 
   const handleNewMessage = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -69,32 +73,37 @@ const Chat: React.FC<AllProps> = ({ chat, socket, user }) => {
     });
   };
 
+
+
   return (
     <Wrapper>
-      {messages?.map((el, i) => {
-        return <p key={i}>{el.message}</p>;
-      })}
-      <form onSubmit={handleNewMessage}>
-        <Stack direction='row' spacing={2}>
-          <InputField
-            name='message'
-            onChange={handleChange}
-            value={formData.message}
-            fullWidth
-            label='new message'
-            id='fullWidth'
-          />
-          <LoadingButton
-            type='submit'
-            endIcon={<SendIcon />}
-            loading={false}
-            loadingPosition='end'
-            variant='contained'
-          >
-            Send
-          </LoadingButton>
-        </Stack>
-      </form>
+        <Paper className='messagesContainer'>
+          {messages?.map((el, i) => {
+            return <h4 key={i}>{el.message}</h4>;
+          })}
+          <div ref={dummyDiv}></div>
+        </Paper>
+        <form onSubmit={handleNewMessage}>
+          <Stack direction='row' spacing={2}>
+            <InputField
+              name='message'
+              onChange={handleChange}
+              value={formData.message}
+              fullWidth
+              label='new message'
+              id='fullWidth'
+            />
+            <LoadingButton
+              type='submit'
+              endIcon={<SendIcon />}
+              loading={false}
+              loadingPosition='end'
+              variant='contained'
+            >
+              Send
+            </LoadingButton>
+          </Stack>
+        </form>
     </Wrapper>
   );
 };

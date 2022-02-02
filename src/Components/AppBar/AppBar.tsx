@@ -7,7 +7,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 
-import { Search, SearchIconWrapper, StyledInputBase, MaterialUISwitch} from './AppBar.styles';
+import { Search, SearchIconWrapper, StyledInputBase, MaterialUISwitch, Wrapper } from './AppBar.styles';
 
 import { connect } from 'react-redux';
 import { toggleDarkMode } from '../../Redux/Actions';
@@ -17,6 +17,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import { ProjectEnum } from '../../Enums';
 import {useNavigate} from "react-router-dom";
+
 
 interface PropsFromState {
   data: DarkMode;
@@ -125,18 +126,18 @@ const PrimarySearchAppBar: React.FC<Props> = ({ data, toggleDarkMode , children}
   );
 
   return (
-
+<Wrapper>
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position='sticky'>
         <Toolbar>
           <IconButton
             size='large' edge='start' color='inherit' aria-label='open drawer' sx={{ mr: 2 }}
-          >
+            >
             <MenuIcon />
           </IconButton>
           <Typography
             variant='h6' noWrap component='div' sx={{ display: { xs: 'none', sm: 'block' } }}
-          >
+            >
             {ProjectEnum.APP_NAME.toUpperCase()}
           </Typography>
           <Search>
@@ -145,20 +146,20 @@ const PrimarySearchAppBar: React.FC<Props> = ({ data, toggleDarkMode , children}
             </SearchIconWrapper>
             <StyledInputBase
               placeholder='Search…' inputProps={{ 'aria-label': 'search' }}
-            />
+              />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton
               size='large' aria-label='show 4 new mails' color='inherit'
-            >
+              >
               <Badge badgeContent={4} color='error'>
                 <MailIcon />
               </Badge>
             </IconButton>
             <IconButton
               size='large' aria-label='show 17 new notifications' color='inherit'
-            >
+              >
               <Badge badgeContent={17} color='error'>
                 <NotificationsIcon />
               </Badge>
@@ -172,7 +173,7 @@ const PrimarySearchAppBar: React.FC<Props> = ({ data, toggleDarkMode , children}
               aria-haspopup='true'
               onClick={handleProfileMenuOpen}
               color='inherit'
-            >
+              >
               <AccountCircle />
             </IconButton>
           </Box>
@@ -184,7 +185,7 @@ const PrimarySearchAppBar: React.FC<Props> = ({ data, toggleDarkMode , children}
               aria-haspopup='true'
               onClick={handleMobileMenuOpen}
               color='inherit'
-            >
+              >
               <MoreIcon />
             </IconButton>
           </Box>
@@ -194,6 +195,7 @@ const PrimarySearchAppBar: React.FC<Props> = ({ data, toggleDarkMode , children}
       {renderMenu}
       {children}
     </Box>
+</Wrapper>
   );
 };
 const mapStateToProps = ({ darkMode }: ApplicationState) => ({

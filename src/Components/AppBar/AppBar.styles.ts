@@ -1,8 +1,10 @@
 import {alpha, styled} from '@mui/material/styles'
-import {Paper, Switch, InputBase} from '@mui/material'
+import { Switch, InputBase} from '@mui/material'
 
-export const Wrapper = styled(Paper)`
-`;
+export const Wrapper = styled('div')(({ theme }) => ({
+    maxHeight: `calc(100vh - ${theme.mixins.toolbar.minHeight}px)`,
+    // height: "100vh",
+}))
 
 export const Search = styled('div')(({theme})=> ({
     position: 'relative',

@@ -4,7 +4,8 @@ import { Paper } from '@mui/material';
 export const Wrapper = styled(Paper)({
   width: '100%',
   minHeight: '100vh',
-  height: '100%',
+  maxHeight: '100vh',
+  // height: '100%',
   borderRadius: '0px',
 });
 
