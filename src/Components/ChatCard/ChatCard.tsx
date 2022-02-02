@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import {Avatar/*, Typography*/} from '@mui/material'
 import {Socket, User} from "../../Redux/Types";
 import {createChat} from '../../Socket'
-import {} from '@mui/icons-material'
+
 
 interface PropsFromState {
   userToken: string;

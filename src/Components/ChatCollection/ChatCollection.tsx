@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Wrapper } from './ChatCollection.styles';
+import { Wrapper, ChatCollectionOptions } from './ChatCollection.styles';
 import axios from 'axios';
 import { ChatType } from '../../Types';
 import { ApplicationState } from '../../Redux';
@@ -8,7 +8,10 @@ import { AnyAction } from 'redux';
 import { setUser, setUserToken } from '../../Redux/Actions';
 import { connect } from 'react-redux';
 import { ChatCard } from '../index';
-import {User} from "../../Redux/Types";
+import { User } from '../../Redux/Types';
+import { IconButton } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+
 
 type MainProps = {
   currentChat: ChatType;
@@ -23,8 +26,13 @@ interface PropsFromState {
 type AllProps = PropsFromState & MainProps;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ChatCollection: React.FC<AllProps> = ({ userToken,currentChat, setCurrentChat }) => {
+const ChatCollection: React.FC<AllProps> = ({
+  userToken,
+  currentChat,
+  setCurrentChat,
+}) => {
   const [chats, setChats] = useState<string[]>();
+
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
       await axios
@@ -33,13 +41,26 @@ const ChatCollection: React.FC<AllProps> = ({ userToken,currentChat, setCurrentC
         })
         .then((res) => setChats(res.data.chats))
         .catch((err) => console.log(err));
-    };    void fetchData();
+    };
+    void fetchData();
   }, []);
 
   return (
     <Wrapper>
+      <ChatCollectionOptions>
+        <IconButton>
+          <AddIcon />
+        </IconButton>
+      </ChatCollectionOptions>
       {chats?.map((chat_id, i) => {
-        return <ChatCard setCurrentChat={setCurrentChat} active={currentChat.chat_id === chat_id} key={i} chat_id={chat_id} />;
+        return (
+          <ChatCard
+            setCurrentChat={setCurrentChat}
+            active={currentChat.chat_id === chat_id}
+            key={i}
+            chat_id={chat_id}
+          />
+        );
       })}
     </Wrapper>
   );

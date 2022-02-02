@@ -1,4 +1,4 @@
-import React, { FormEvent, useState, useRef } from 'react';
+import React, { FormEvent, useState, useRef, useEffect } from 'react';
 import { Wrapper } from './Chat.styles';
 import { ChatType, SingleMessageType } from '../../Types';
 import { sendSingleMessage } from '../../Socket';
@@ -11,6 +11,7 @@ import SendIcon from '@mui/icons-material/Send';
 import Stack from '@mui/material/Stack';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Paper } from '@mui/material';
+
 
 type MessageFormData = {
   message: string;
@@ -29,13 +30,17 @@ interface PropsFromDispatch {}
 
 type AllProps = MainProps & PropsFromState & PropsFromDispatch;
 
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Chat: React.FC<AllProps> = ({ chat, socket, user }) => {
   const [messages, setMessages] = useState<SingleMessageType[]>([]);
   const [formData, setFormData] = useState<MessageFormData>({ message: '' });
   
-  const dummyDiv = useRef(null)
-  // const scrollBottom = () => dummyDiv.current.scrolltoBottom
+  const messagesEndRef = useRef(null)
+  const scrollBottom = () => {
+    //@ts-ignore
+    messagesEndRef.current.scrollIntoView({behavior: 'smooth'});
+  }
 
   const handleNewMessage = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -74,6 +79,8 @@ const Chat: React.FC<AllProps> = ({ chat, socket, user }) => {
   };
 
 
+  useEffect(scrollBottom, [messages])
+
 
   return (
     <Wrapper>
@@ -81,9 +88,12 @@ const Chat: React.FC<AllProps> = ({ chat, socket, user }) => {
           {messages?.map((el, i) => {
             return <h4 key={i}>{el.message}</h4>;
           })}
-          <div ref={dummyDiv}></div>
+          <div ref={messagesEndRef}></div>
         </Paper>
-        <form onSubmit={handleNewMessage}>
+        <form onSubmit={(e) => {
+          handleNewMessage(e)
+          scrollBottom()
+        }}>
           <Stack direction='row' spacing={2}>
             <InputField
               name='message'
@@ -99,6 +109,7 @@ const Chat: React.FC<AllProps> = ({ chat, socket, user }) => {
               loading={false}
               loadingPosition='end'
               variant='contained'
+              onClick={scrollBottom}
             >
               Send
             </LoadingButton>

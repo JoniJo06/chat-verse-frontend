@@ -3,7 +3,7 @@ import { Paper } from '@mui/material'
 
 export const Wrapper = styled(Paper)(({theme})=>({
   width: '25vw',
-  height: '93.2vh',
+  height: '100%',
   borderRadius: 0,
   borderRight: theme.palette.mode === 'dark' ? '1px solid white' : '1px solid black'
 }));
