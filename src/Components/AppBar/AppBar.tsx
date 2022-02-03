@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {AppBar, Badge, Box, IconButton, Menu, MenuItem, Toolbar, Typography} from '@mui/material';
+import { ChangeEvent } from 'react';
+import { AppBar, Badge, Box, IconButton, Menu, MenuItem, Toolbar, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
@@ -7,19 +8,17 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 
-import {MaterialUISwitch, Search, SearchIconWrapper, StyledInputBase, Wrapper} from './AppBar.styles';
+import { MaterialUISwitch, Search, SearchIconWrapper, StyledInputBase, Wrapper } from './AppBar.styles';
 
-import {connect} from 'react-redux';
-import {toggleDarkMode} from '../../Redux/Actions';
-import {DarkMode} from '../../Redux/Types/';
-import {ApplicationState} from '../../Redux';
-import {ThunkDispatch} from 'redux-thunk';
-import {AnyAction} from 'redux';
-import {ProjectEnum} from '../../Enums';
-import {useNavigate} from "react-router-dom";
-import {ChangeEvent} from "react";
-import axios from 'axios'
-
+import { connect } from 'react-redux';
+import { toggleDarkMode } from '../../Redux/Actions';
+import { DarkMode } from '../../Redux/Types/';
+import { ApplicationState } from '../../Redux';
+import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from 'redux';
+import { ProjectEnum } from '../../Enums';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 interface PropsFromState {
   data: DarkMode;
@@ -33,21 +32,21 @@ interface PropsFromDispatch {
 
 type Props = PropsFromState & PropsFromDispatch
 // eslint-disable-next-line @typescript-eslint/no-shadow
-const PrimarySearchAppBar: React.FC<Props> = ({data, toggleDarkMode, children}) => {
+const PrimarySearchAppBar: React.FC<Props> = ({ data, toggleDarkMode, children }) => {
 
   const ToggleDarkMode = () => {
     toggleDarkMode();
   };
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [ anchorEl, setAnchorEl ] = React.useState<null | HTMLElement>(null);
   const [
-    mobileMoreAnchorEl,
-    setMobileMoreAnchorEl,
-  ] = React.useState<null | HTMLElement>(null);
+          mobileMoreAnchorEl,
+          setMobileMoreAnchorEl,
+        ] = React.useState<null | HTMLElement>(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -66,13 +65,13 @@ const PrimarySearchAppBar: React.FC<Props> = ({data, toggleDarkMode, children}) 
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const handleSearch = (e :ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    if(!e.target.value.trim())
-      return
+  const handleSearch = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (!e.target.value.trim())
+      return;
     axios(String(process.env.REACT_APP_BACKEND_URL) + `/search?search=${e.target.value}&type=user`)
       .then(res => console.log(res.data))
-      .catch(err => console.log(err))
-  }
+      .catch(err => console.log(err));
+  };
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -105,7 +104,7 @@ const PrimarySearchAppBar: React.FC<Props> = ({data, toggleDarkMode, children}) 
       <MenuItem>
         <IconButton size='large' aria-label='show 4 new mails' color='inherit'>
           <Badge badgeContent={4} color='error'>
-            <MailIcon/>
+            <MailIcon />
           </Badge>
         </IconButton>
         <p>Messages</p>
@@ -115,7 +114,7 @@ const PrimarySearchAppBar: React.FC<Props> = ({data, toggleDarkMode, children}) 
           size='large' aria-label='show 17 new notifications' color='inherit'
         >
           <Badge badgeContent={17} color='error'>
-            <NotificationsIcon/>
+            <NotificationsIcon />
           </Badge>
         </IconButton>
         <p>Notifications</p>
@@ -128,7 +127,7 @@ const PrimarySearchAppBar: React.FC<Props> = ({data, toggleDarkMode, children}) 
           aria-haspopup='true'
           color='inherit'
         >
-          <AccountCircle/>
+          <AccountCircle />
         </IconButton>
         <p>Profile</p>
       </MenuItem>
@@ -137,46 +136,44 @@ const PrimarySearchAppBar: React.FC<Props> = ({data, toggleDarkMode, children}) 
 
   return (
     <Wrapper>
-      <Box sx={{flexGrow: 1}}>
+      <Box sx={{ flexGrow: 1 }}>
         <AppBar position='sticky'>
           <Toolbar>
             <IconButton
-              size='large' edge='start' color='inherit' aria-label='open drawer' sx={{mr: 2}}
+              size='large' edge='start' color='inherit' aria-label='open drawer' sx={{ mr: 2 }}
             >
-              <MenuIcon/>
+              <MenuIcon />
             </IconButton>
             <Typography
-              variant='h6' noWrap component='div' sx={{display: {xs: 'none', sm: 'block'}}}
+              variant='h6' noWrap component='div' sx={{ display: { xs: 'none', sm: 'block' } }}
             >
               {ProjectEnum.APP_NAME.toUpperCase()}
             </Typography>
-            <Search
-            >
+            <Search>
               <SearchIconWrapper>
-                <SearchIcon/>
+                <SearchIcon />
               </SearchIconWrapper>
               <StyledInputBase
-                placeholder='Search' inputProps={{'aria-label': 'search'}}
-                onChange={handleSearch}
+                placeholder='Search' inputProps={{ 'aria-label': 'search' }} onChange={handleSearch}
               />
             </Search>
-            <Box sx={{flexGrow: 1}}/>
-            <Box sx={{display: {xs: 'none', md: 'flex'}}}>
+            <Box sx={{ flexGrow: 1 }} />
+            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
               <IconButton
                 size='large' aria-label='show 4 new mails' color='inherit'
               >
                 <Badge badgeContent={4} color='error'>
-                  <MailIcon/>
+                  <MailIcon />
                 </Badge>
               </IconButton>
               <IconButton
                 size='large' aria-label='show 17 new notifications' color='inherit'
               >
                 <Badge badgeContent={17} color='error'>
-                  <NotificationsIcon/>
+                  <NotificationsIcon />
                 </Badge>
               </IconButton>
-              <MaterialUISwitch sx={{m: 1}} onChange={() => ToggleDarkMode()} checked={data.darkMode}/>
+              <MaterialUISwitch sx={{ m: 1 }} onChange={() => ToggleDarkMode()} checked={data.darkMode} />
               <IconButton
                 size='large'
                 edge='end'
@@ -186,10 +183,10 @@ const PrimarySearchAppBar: React.FC<Props> = ({data, toggleDarkMode, children}) 
                 onClick={handleProfileMenuOpen}
                 color='inherit'
               >
-                <AccountCircle/>
+                <AccountCircle />
               </IconButton>
             </Box>
-            <Box sx={{display: {xs: 'flex', md: 'none'}}}>
+            <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
               <IconButton
                 size='large'
                 aria-label='show more'
@@ -198,7 +195,7 @@ const PrimarySearchAppBar: React.FC<Props> = ({data, toggleDarkMode, children}) 
                 onClick={handleMobileMenuOpen}
                 color='inherit'
               >
-                <MoreIcon/>
+                <MoreIcon />
               </IconButton>
             </Box>
           </Toolbar>
@@ -210,10 +207,10 @@ const PrimarySearchAppBar: React.FC<Props> = ({data, toggleDarkMode, children}) 
     </Wrapper>
   );
 };
-const mapStateToProps = ({darkMode}: ApplicationState) => ({
+const mapStateToProps = ({ darkMode }: ApplicationState) => ({
   data: darkMode.data,
   loading: darkMode.loading,
-  errors: darkMode.errors
+  errors: darkMode.errors,
 });
 const mapDispatchProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
   return {

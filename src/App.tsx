@@ -1,18 +1,18 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import {HomePage, LandingPage, LoginPage, ProfilePage, SignUpPage} from './Pages';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { HomePage, LandingPage, LoginPage, ProfilePage, SignUpPage } from './Pages';
 import { AppBar } from './Components';
 import { Wrapper } from './App.styles';
 import { ApplicationState } from './Redux';
 import { AnyAction, Store } from 'redux';
-import { Provider } from 'react-redux';
+import { connect, Provider } from 'react-redux';
 import { ThemeProvider } from '@mui/material/styles';
-import { connect } from 'react-redux';
-import { lightTheme, darkTheme } from './Themes';
+import { darkTheme, lightTheme } from './Themes';
 import { CssBaseline } from '@mui/material';
 import { ThunkDispatch } from 'redux-thunk';
 import { setSocket } from './Redux/Actions';
 import { Socket } from 'socket.io-client';
+
 interface MainProps {
   store: Store<ApplicationState>;
 }
@@ -34,17 +34,17 @@ const App: React.FC<AllProps> = ({ store, darkMode }) => {
       <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
         <Wrapper>
           <CssBaseline />
-            <BrowserRouter>
-          <AppBar>
+          <BrowserRouter>
+            <AppBar>
               <Routes>
                 <Route path='/' element={<LandingPage />} />
-                <Route path='home' element={<HomePage />} />
                 <Route path='login' element={<LoginPage />} />
                 <Route path='signup' element={<SignUpPage />} />
-                <Route path='profile/:user_id' element={<ProfilePage />} />
+                <Route path='home' element={<HomePage />} />
+                <Route path='profile' element={<ProfilePage />} />
               </Routes>
-          </AppBar>
-            </BrowserRouter>
+            </AppBar>
+          </BrowserRouter>
         </Wrapper>
       </ThemeProvider>
     </Provider>
