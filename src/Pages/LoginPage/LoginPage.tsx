@@ -91,7 +91,6 @@ const LoginPage: React.FC<AllProps> = ({ user, setUserToken, setUser, setSocket 
       Object.keys(temp).forEach((param: string) => {
         temp = { ...temp, [param]: '' };
       });
-
       return temp;
     });
   };
