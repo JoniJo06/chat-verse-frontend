@@ -37,10 +37,10 @@ const App: React.FC<AllProps> = ({ store, darkMode }) => {
             <BrowserRouter>
           <AppBar>
               <Routes>
+                <Route path='/' element={<LandingPage />} />
                 <Route path='home' element={<HomePage />} />
                 <Route path='login' element={<LoginPage />} />
                 <Route path='signup' element={<SignUpPage />} />
-                <Route path='/' element={<LandingPage />} />
               </Routes>
           </AppBar>
             </BrowserRouter>
