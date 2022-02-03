@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { HomePage, LandingPage, LoginPage, SignUpPage } from './Pages';
+import {HomePage, LandingPage, LoginPage, ProfilePage, SignUpPage} from './Pages';
 import { AppBar } from './Components';
 import { Wrapper } from './App.styles';
 import { ApplicationState } from './Redux';
@@ -41,6 +41,7 @@ const App: React.FC<AllProps> = ({ store, darkMode }) => {
                 <Route path='home' element={<HomePage />} />
                 <Route path='login' element={<LoginPage />} />
                 <Route path='signup' element={<SignUpPage />} />
+                <Route path='profile/:user_id' element={<ProfilePage />} />
               </Routes>
           </AppBar>
             </BrowserRouter>
