@@ -6,6 +6,7 @@ export const Wrapper = styled(Paper)(({theme})=>({
   height: '90vh',
   width: '100%',
   display: 'flex',
+  overflow: 'hidden'
 }))
 
 export const TabsContainer = styled(Paper)(({theme}) => ({

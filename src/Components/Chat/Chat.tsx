@@ -56,7 +56,7 @@ const Chat: React.FC<AllProps> = ({ chat, socket, user }) => {
     setMessages((prev) => [...prev, message]);
     //TODO
     void axios.post(
-      String(process.env.REACT_APP_BACKEND_URL + '/single-messages'),
+      process.env.REACT_APP_BACKEND_URL + '/single-messages',
       {
         message,
       }
