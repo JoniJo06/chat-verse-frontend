@@ -256,7 +256,8 @@ const PrimarySearchAppBar: React.FC<Props> = ({
               variant='h6'
               noWrap
               component='div'
-              sx={{ display: { xs: 'none', sm: 'block' } }}
+              sx={{ display: { xs: 'none', sm: 'block' }, cursor: 'pointer'}}
+              onClick={() => navigate('/home')}
             >
               {ProjectEnum.APP_NAME.toUpperCase()}
             </Typography>

@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import React from 'react';
 import { Wrapper } from './ProfilePageTabPanel.styles'
 
@@ -19,9 +19,9 @@ const ProfilePageTabPanel: React.FC<MainProps> = ({children, index, value, ...ot
   >
       {value === index && (
           <Box>
-              <Typography>
+              <div>
                   {children}
-              </Typography>
+              </div>
           </Box>
       )}
   </Wrapper>;

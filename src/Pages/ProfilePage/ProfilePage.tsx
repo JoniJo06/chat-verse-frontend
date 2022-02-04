@@ -186,7 +186,7 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
         </Box>
         <Box
           sx={{
-            width: '50%',
+            width: '80%',
             margin: 'auto',
             padding: '2rem',
             boxSizing: 'borderBox',
@@ -197,7 +197,7 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
               Edit Profile
             </Button>
             <Grid sx={{ margin: 'auto' }} container spacing={5}>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   label='First Name'
                   value={formData.first_name}
@@ -207,7 +207,7 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
                   onChange={changeFormData}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   label='Last Name'
                   value={formData.last_name}
@@ -217,7 +217,7 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
                   onChange={changeFormData}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   label='Email'
                   value={formData.email}
@@ -227,7 +227,7 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
                   onChange={changeFormData}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   label='Phone'
                   value={formData.phone}
@@ -270,6 +270,7 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
             </AccordionSummary>
             <AccordionDetails>
              {friendsData?.friend_requests?.map(el => {
+               console.log(friendsData)
                return <Typography
                variant='body1'>
                  {el.username}
@@ -287,15 +288,17 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
               id='panel2bh-header'
             >
               <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                pending request
+                pending requests
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>
-                Nunc vitae orci ultricies, auctor nunc in, volutpat nisl.
-                Integer sit amet egestas eros, vitae egestas augue. Duis vel est
-                augue.
-              </Typography>
+            {friendsData?.pending_requests?.map(el => {
+              console.log(el)
+               return <Typography
+               variant='body1'>
+                 {el.username}
+               </Typography>
+             })}
             </AccordionDetails>
           </Accordion>
           <Accordion
@@ -312,11 +315,12 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>
-                Nunc vitae orci ultricies, auctor nunc in, volutpat nisl.
-                Integer sit amet egestas eros, vitae egestas augue. Duis vel est
-                augue.
-              </Typography>
+            {friendsData?.friends?.map(el => {
+               return <Typography
+               variant='body1'>
+                 {el.username}
+               </Typography>
+             })}
             </AccordionDetails>
           </Accordion>
           <Accordion
@@ -333,11 +337,12 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>
-                Nunc vitae orci ultricies, auctor nunc in, volutpat nisl.
-                Integer sit amet egestas eros, vitae egestas augue. Duis vel est
-                augue.
-              </Typography>
+            {friendsData?.friend_requests?.map(el => {
+               return <Typography
+               variant='body1'>
+                 {el.username}
+               </Typography>
+             })}
             </AccordionDetails>
           </Accordion>
         </>
