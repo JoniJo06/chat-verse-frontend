@@ -59,7 +59,6 @@ const ChatCard: React.FC<AllProps> = ({ chat_id,setCurrentChat, userToken , sock
 
     return color;
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const stringAvatar = (name: string) => {
     const twoWords :boolean = name.split(' ').length >= 2;
     return {

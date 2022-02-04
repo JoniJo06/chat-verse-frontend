@@ -32,7 +32,6 @@ type AllProps = PropsFromState;
 const HomePage: React.FC<AllProps> = ({
   user /*, socket*/ /*, userToken*/,
 }) => {
-  const [access, setAccess] = useState(true);
   const [tabPage, setTabPage] = useState<number>(0);
   const [currentChat, setCurrentChat] = useState<ChatType>({
     chat_id: '',
@@ -44,13 +43,6 @@ const HomePage: React.FC<AllProps> = ({
   // console.log(socket)
   // console.log(userToken)
 
-  useEffect(() => {
-    const fn = async () => {
-      if (!user.status) navigate('/login');
-      else setAccess(true);
-    };
-    void fn();
-  }, []);
 
   const a11yProps = (index: number) => {
     return {
@@ -64,8 +56,6 @@ const HomePage: React.FC<AllProps> = ({
   };
 
   return (
-    <React.Fragment>
-      {access && (
         <Wrapper>
           <TopicCollection />
           <Chat chat={currentChat} />
@@ -94,8 +84,6 @@ const HomePage: React.FC<AllProps> = ({
             </TabsContainer>
           )}
         </Wrapper>
-      )}
-    </React.Fragment>
   );
 };
 const mapStateToProps = ({ user, userToken, socket }: ApplicationState) => ({

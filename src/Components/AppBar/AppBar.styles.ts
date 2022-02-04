@@ -1,9 +1,13 @@
 import {alpha, styled} from '@mui/material/styles'
-import { Switch, InputBase} from '@mui/material'
+import { Switch, InputBase, Box} from '@mui/material'
 
 export const Wrapper = styled('div')(({ theme }) => ({
     maxHeight: `calc(100vh - ${theme.mixins.toolbar.minHeight}px)`,
     // height: "100vh",
+
+    '.searchContainer': {
+        position: 'relative',
+    }
 }))
 
 export const Search = styled('div')(({theme})=> ({
@@ -92,3 +96,9 @@ export const MaterialUISwitch = styled(Switch)(({ theme }) => ({
         borderRadius: 20 / 2,
     },
 }));
+
+
+export const AccordionContainer = styled(Box)(({theme}) => ({
+    position: 'absolute',
+    width: '100%',
+}))

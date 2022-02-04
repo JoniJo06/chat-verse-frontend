@@ -56,12 +56,6 @@ const LoginPage: React.FC<AllProps> = ({ user, setUserToken, setUser, setSocket 
   const theme = useTheme();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fn = async () => {
-      if (user.status) navigate('/home');
-    };
-    void fn();
-  }, []);
 
   const handleChange = (e: any) => {
     setFormData((prev) => {
@@ -80,7 +74,6 @@ const LoginPage: React.FC<AllProps> = ({ user, setUserToken, setUser, setSocket 
       .then((res) => {
         setUserToken(res.data.token);
         setUser(res.data.status, res.data._id);
-        console.log(res.data._id)
         setSocket(res.data._id)
         navigate('/home');
       })

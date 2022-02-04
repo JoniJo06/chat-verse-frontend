@@ -16,17 +16,13 @@ import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { LockOutlined as LockOutlinedIcon } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
-// import { useSelector, useDispatch } from 'react-redux';
-// import { RootState } from '../../Redux/Reducers';
 import axios from 'axios';
 import { ApplicationState } from '../../Redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import { setUser, setUserToken } from '../../Redux/Actions';
 import { connect } from 'react-redux';
-import {User} from "../../Redux/Types";
-// import { bindActionCreators } from 'redux';
-// import { actionCreators } from '../../Redux';
+import { User } from '../../Redux/Types';
 
 const paperStyle = {
   padding: 20,
@@ -50,19 +46,25 @@ type SignUpFormData = {
 
 interface PropsFromState {
   user: User;
-  userToken: string
+  userToken: string;
 }
 
 interface PropsFromDispatch {
   setUserToken: (token: string) => void;
-  setUser: (status: string, user_id :string) => void;
+  setUser: (status: string, user_id: string) => void;
 }
 
-type AllProps = PropsFromState & PropsFromDispatch
+type AllProps = PropsFromState & PropsFromDispatch;
 
 
-// eslint-disable-next-line @typescript-eslint/no-shadow
-const SignUpPage: React.FC<AllProps> = ({ setUser, setUserToken, user, userToken}) => {
+const SignUpPage: React.FC<AllProps> = ({
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  setUser,
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  setUserToken,
+  user,
+  userToken,
+}) => {
   const [formData, setFormData] = useState<SignUpFormData>({
     first_name: '',
     last_name: '',
@@ -74,18 +76,10 @@ const SignUpPage: React.FC<AllProps> = ({ setUser, setUserToken, user, userToken
     retype_password: '',
   });
 
-  console.log(userToken)
+  console.log(userToken);
 
   const theme = useTheme();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fn = async () => {
-      if(user.status)
-        navigate('/home')
-    }
-    fn();
-  }, []);
 
   const handleChange = (e: any) => {
     setFormData((prev) => {
@@ -171,6 +165,9 @@ const SignUpPage: React.FC<AllProps> = ({ setUser, setUserToken, user, userToken
                 required
                 onChange={handleChange}
                 value={formData.username}
+                inputProps={{
+                  minLength: 5,
+                }}
               />
             </Grid>
             <Grid item xs={12} md={6}>
@@ -201,16 +198,26 @@ const SignUpPage: React.FC<AllProps> = ({ setUser, setUserToken, user, userToken
             <Grid item xs={12} md={6}>
               <FormLabel id='gender'>Gender *</FormLabel>
               <RadioGroup
-                row aria-labelledby='gender' name='gender' onChange={handleChange} value={formData.gender}
+                row
+                aria-labelledby='gender'
+                name='gender'
+                onChange={handleChange}
+                value={formData.gender}
               >
                 <FormControlLabel
-                  value='female' control={<Radio required={true} />} label='Female'
+                  value='female'
+                  control={<Radio required={true} />}
+                  label='Female'
                 />
                 <FormControlLabel
-                  value='male' control={<Radio required={true} />} label='Male'
+                  value='male'
+                  control={<Radio required={true} />}
+                  label='Male'
                 />
                 <FormControlLabel
-                  value='other' control={<Radio required={true} />} label='Other'
+                  value='other'
+                  control={<Radio required={true} />}
+                  label='Other'
                 />
               </RadioGroup>
             </Grid>
@@ -225,6 +232,9 @@ const SignUpPage: React.FC<AllProps> = ({ setUser, setUserToken, user, userToken
                 required
                 onChange={handleChange}
                 value={formData.password}
+                inputProps={{
+                  minLength: 8,
+                }}
               />
             </Grid>
 
@@ -241,12 +251,12 @@ const SignUpPage: React.FC<AllProps> = ({ setUser, setUserToken, user, userToken
               />
             </Grid>
           </Grid>
-          {/*<FormControlLabel*/}
-          {/*  control={<Checkbox name="checkedB" color="primary" />}*/}
-          {/*  label="Remember me"*/}
-          {/*/>*/}
           <Button
-            type='submit' color='primary' variant='contained' style={btnstyle} fullWidth
+            type='submit'
+            color='primary'
+            variant='contained'
+            style={btnstyle}
+            fullWidth
           >
             Sign up
           </Button>
@@ -260,7 +270,8 @@ const SignUpPage: React.FC<AllProps> = ({ setUser, setUserToken, user, userToken
           <NavLink
             style={{
               color: theme.palette.mode === 'dark' ? 'lightblue' : 'darkblue',
-            }} to='/login'
+            }}
+            to='/login'
           >
             Sign in
           </NavLink>
@@ -271,13 +282,14 @@ const SignUpPage: React.FC<AllProps> = ({ setUser, setUserToken, user, userToken
 };
 const mapStateToProps = ({ user, userToken }: ApplicationState) => ({
   user: user.data,
-  userToken: userToken.data.userToken
+  userToken: userToken.data.userToken,
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
   return {
     setUserToken: (token: string) => dispatch(setUserToken(token)),
-    setUser: (status: string, user_id :string) => dispatch(setUser(status, user_id)),
+    setUser: (status: string, user_id: string) =>
+      dispatch(setUser(status, user_id)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(SignUpPage);

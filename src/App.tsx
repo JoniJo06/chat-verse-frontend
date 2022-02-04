@@ -1,6 +1,12 @@
-import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { HomePage, LandingPage, LoginPage, ProfilePage, SignUpPage } from './Pages';
+import React, { useEffect } from 'react';
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import {
+  HomePage,
+  LandingPage,
+  LoginPage,
+  ProfilePage,
+  SignUpPage,
+} from './Pages';
 import { AppBar } from './Components';
 import { Wrapper } from './App.styles';
 import { ApplicationState } from './Redux';
@@ -12,6 +18,25 @@ import { CssBaseline } from '@mui/material';
 import { ThunkDispatch } from 'redux-thunk';
 import { setSocket } from './Redux/Actions';
 import { Socket } from 'socket.io-client';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
+interface RedirectProps {
+  location: string;
+}
+
+
+const Redirect: React.FC<RedirectProps> = ({location}) => {
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate('/'+location)
+  }, [])
+  return <></>
+}
+
 
 interface MainProps {
   store: Store<ApplicationState>;
@@ -24,24 +49,35 @@ interface PropsFromDispatch {
 interface PropsFromState {
   darkMode: boolean;
   socket: Socket;
+  userToken: string;
 }
 
 type AllProps = MainProps & PropsFromDispatch & PropsFromState;
 
-const App: React.FC<AllProps> = ({ store, darkMode }) => {
+const App: React.FC<AllProps> = ({ store, darkMode, userToken }) => {
   return (
     <Provider store={store}>
       <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
         <Wrapper>
           <CssBaseline />
+          <ToastContainer />
           <BrowserRouter>
             <AppBar>
               <Routes>
-                <Route path='/' element={<LandingPage />} />
-                <Route path='login' element={<LoginPage />} />
-                <Route path='signup' element={<SignUpPage />} />
-                <Route path='home' element={<HomePage />} />
-                <Route path='profile' element={<ProfilePage />} />
+                {userToken ? (
+                  <>
+                    <Route path='home' element={<HomePage />} />
+                    <Route path='profile' element={<ProfilePage />} />
+                    <Route path='/*' element={<Redirect location='home' />} />
+                  </>
+                ):(
+                  <>
+                  <Route path='/' element={<LandingPage />} />
+                  <Route path='login' element={<LoginPage />} />
+                  <Route path='signup' element={<SignUpPage />} />
+                  <Route path='/*' element={<Redirect location='login' />} />
+                  </>
+                )}
               </Routes>
             </AppBar>
           </BrowserRouter>
@@ -51,9 +87,14 @@ const App: React.FC<AllProps> = ({ store, darkMode }) => {
   );
 };
 
-const mapStateToProps = ({ darkMode, socket }: ApplicationState) => ({
+const mapStateToProps = ({
+  darkMode,
+  socket,
+  userToken,
+}: ApplicationState) => ({
   darkMode: darkMode.data.darkMode,
   socket: socket.data.socket,
+  userToken: userToken.data.userToken,
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
