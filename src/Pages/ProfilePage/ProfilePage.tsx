@@ -27,25 +27,33 @@ type FormDataType = {
   last_name: string;
   email: string;
   phone: string;
-  public: boolean;
   slogan: string;
 };
 
+type UserInfoType = {
+  profile_pic: string;
+  username: string;
+  public: boolean;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  slogan: string;
+  _id: string;
+};
 
 interface Friend {
-_id: string;
-profile_pic: string;
-username: string;
+  _id: string;
+  profile_pic: string;
+  username: string;
 }
-
 
 type FriendsDataType = {
-  friend_requests: Friend[]
-  pending_requests: Friend[]
-  friends: Friend[]
-  blocked_users: Friend[]
-}
-
+  friend_requests: Friend[];
+  pending_requests: Friend[];
+  friends: Friend[];
+  blocked_users: Friend[];
+};
 
 interface MainProps {}
 
@@ -65,16 +73,37 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
     last_name: '',
     email: '',
     phone: '',
-    public: false,
     slogan: '',
   });
   const [edit, setEdit] = useState(false);
-  const [ friendsData, setFriendsData] = useState<FriendsDataType | null>(null);
-  const [ fetch, setFetch ] = useState(false);
+  const [usernameEdit, setUsernameEdit] = useState(false);
+  const [usernameFormData, setUsernameFormData] = useState('');
+  const [friendsData, setFriendsData] = useState<FriendsDataType | null>(null);
+  const [fetch, setFetch] = useState(false);
+  const [togglePublicLoading, setTogglePublicLoading] = useState(false);
+  const [userInfo, setUserInfo] = useState<UserInfoType>({
+    profile_pic: '',
+    username: '',
+    public: false,
+    first_name: '',
+    last_name: '',
+    email: '',
+    phone: '',
+    slogan: '',
+    _id: ''
+  });
+
+  
 
   const handleProfileChange = (e: any) => {
     e.preventDefault();
     if (!edit) {
+      const { first_name, last_name, email, phone, slogan } = e.target;
+      formData.first_name = first_name.value;
+      formData.last_name = last_name.value;
+      formData.email = email.value;
+      formData.phone = phone.value;
+      formData.slogan = slogan.value;
       setEdit(!edit);
     } else {
       setEdit(!edit);
@@ -88,15 +117,16 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
   };
 
   useEffect(() => {
-    const fetchData = () => {
-      axios(process.env.REACT_APP_BACKEND_URL + '/users/profile', {
+      axios(process.env.REACT_APP_BACKEND_URL + '/users/profile/info', {
         headers: { JWT_TOKEN: userToken },
       }).then(({ data }) => {
-        console.log(data);
-      });
-    };
-    void fetchData();
+        setUserInfo(data)
+      })
+      .catch((err) => console.log(err));
   }, []);
+
+
+  
 
   const a11yProps = (index: number) => {
     return {
@@ -106,29 +136,55 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
   };
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setFetch(true)
+    setFetch(true);
     setTabPage(newValue);
   };
 
+  const handleChangeUsername = (e: any) => {
+    e.preventDefault();
+    if (!usernameEdit) {
+      // setUsernameFormData(e.target.children[0].innerHTML);
+      setUsernameEdit(!usernameEdit);
+    } else {
+      setUsernameEdit(!usernameEdit);
+    }
+  };
 
-  const handleExtendedChange =
-  (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+  const handleExtendedChange = (panel: string) => (
+    event: React.SyntheticEvent,
+    isExpanded: boolean
+  ) => {
     setExpanded(isExpanded ? panel : false);
   };
 
+  const togglePublic = async (e: any) => {
+    setTogglePublicLoading(true);
+    await axios(
+      process.env.REACT_APP_BACKEND_URL + '/users/profile/toggle-public',
+      {
+        headers: { JWT_TOKEN: userToken },
+      }
+    )
+      .then((res) =>
+        setUserInfo((prev: UserInfoType) => {
+          return { ...prev, public: res.data.public };
+        })
+      )
+      .catch((err) => console.log(err));
+    setTogglePublicLoading(false);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
-      await axios(process.env.REACT_APP_BACKEND_URL + '/users/friends', {headers: { JWT_TOKEN: userToken }})
-      .then(res => setFriendsData(res.data))
-      .catch((err) => console.log(err))
-      setFetch(false)
-    } 
-    void fetchData()
-  }, [fetch])
-
-
-
+      await axios(process.env.REACT_APP_BACKEND_URL + '/users/friends', {
+        headers: { JWT_TOKEN: userToken },
+      })
+        .then((res) => setFriendsData(res.data))
+        .catch((err) => console.log(err));
+      setFetch(false);
+    };
+    void fetchData();
+  }, [fetch]);
 
   return (
     <Wrapper>
@@ -169,7 +225,18 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
           </label>
         </div>
         <Box sx={{ textAlign: 'center' }}>
-          <h1>Ober Kek</h1>
+          <form onSubmit={handleChangeUsername}>
+            <TextField
+              label='Username'
+              value={usernameEdit ? usernameFormData : userInfo.username}
+              name='username'
+              inputProps={{ readOnly: !usernameEdit }}
+              onChange={(e: any) => setUsernameFormData(e.target.value)}
+            />
+            <Button variant='contained' sx={{ mb: '25px' }} type='submit'>
+              {!usernameEdit ? 'Change Username' : 'Save Username'}
+            </Button>
+          </form>
           <Stack
             justifyContent='center'
             direction='row'
@@ -178,8 +245,10 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
           >
             <Typography>private</Typography>
             <AntSwitch
-              checked={formData.public}
+              checked={userInfo.public}
               inputProps={{ 'aria-label': 'ant design' }}
+              disabled={togglePublicLoading}
+              onChange={togglePublic}
             />
             <Typography>public</Typography>
           </Stack>
@@ -194,13 +263,13 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
         >
           <form onSubmit={handleProfileChange}>
             <Button variant='contained' sx={{ ml: '2rem' }} type='submit'>
-              Edit Profile
+              {edit ? 'Save Changes' : 'Edit Profile'}
             </Button>
             <Grid sx={{ margin: 'auto' }} container spacing={5}>
               <Grid item xs={12} sm={6}>
                 <TextField
                   label='First Name'
-                  value={formData.first_name}
+                  value={edit ? formData.first_name : userInfo.first_name}
                   name='first_name'
                   fullWidth
                   inputProps={{ readOnly: !edit }}
@@ -210,7 +279,7 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
               <Grid item xs={12} sm={6}>
                 <TextField
                   label='Last Name'
-                  value={formData.last_name}
+                  value={edit ? formData.last_name : userInfo.last_name}
                   name='last_name'
                   fullWidth
                   inputProps={{ readOnly: !edit }}
@@ -220,7 +289,7 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
               <Grid item xs={12} sm={6}>
                 <TextField
                   label='Email'
-                  value={formData.email}
+                  value={edit ? formData.email : userInfo.email}
                   name='email'
                   fullWidth
                   inputProps={{ readOnly: !edit }}
@@ -230,7 +299,7 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
               <Grid item xs={12} sm={6}>
                 <TextField
                   label='Phone'
-                  value={formData.phone}
+                  value={edit ? formData.phone : userInfo.phone}
                   name='phone'
                   fullWidth
                   inputProps={{ readOnly: !edit }}
@@ -242,7 +311,7 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
                   multiline
                   maxRows={4}
                   label='Slogan'
-                  value={formData.slogan}
+                  value={edit ? formData.slogan : userInfo.slogan}
                   name='slogan'
                   fullWidth
                   inputProps={{ readOnly: !edit }}
@@ -269,13 +338,13 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-             {friendsData?.friend_requests?.map(el => {
-               console.log(friendsData)
-               return <Typography
-               variant='body1'>
-                 {el.username}
-               </Typography>
-             })}
+              {friendsData?.friend_requests?.map((el) => {
+                return (
+                  <Typography variant='body1' key={el._id}>
+                    {el.username}
+                  </Typography>
+                );
+              })}
             </AccordionDetails>
           </Accordion>
           <Accordion
@@ -292,13 +361,13 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-            {friendsData?.pending_requests?.map(el => {
-              console.log(el)
-               return <Typography
-               variant='body1'>
-                 {el.username}
-               </Typography>
-             })}
+              {friendsData?.pending_requests?.map((el) => {
+                return (
+                  <Typography variant='body1' key={el._id}>
+                    {el.username}
+                  </Typography>
+                );
+              })}
             </AccordionDetails>
           </Accordion>
           <Accordion
@@ -315,12 +384,13 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-            {friendsData?.friends?.map(el => {
-               return <Typography
-               variant='body1'>
-                 {el.username}
-               </Typography>
-             })}
+              {friendsData?.friends?.map((el) => {
+                return (
+                  <Typography variant='body1' key={el._id}>
+                    {el.username}
+                  </Typography>
+                );
+              })}
             </AccordionDetails>
           </Accordion>
           <Accordion
@@ -337,12 +407,13 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-            {friendsData?.friend_requests?.map(el => {
-               return <Typography
-               variant='body1'>
-                 {el.username}
-               </Typography>
-             })}
+              {friendsData?.friend_requests?.map((el) => {
+                return (
+                  <Typography variant='body1' key={el._id}>
+                    {el.username}
+                  </Typography>
+                );
+              })}
             </AccordionDetails>
           </Accordion>
         </>
