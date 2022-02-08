@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import React from 'react';
-import { Wrapper } from './ChatCollectionTabPanel.styles'
+import { Wrapper, StyledBox } from './ChatCollectionTabPanel.styles'
 
 interface MainProps {
     children?: React.ReactNode
@@ -18,11 +18,9 @@ const ChatCollectionTabPanel: React.FC<MainProps> = ({children, index, value, ..
   {...other}
   >
       {value === index && (
-          <Box>
-              <Typography>
+          <StyledBox>
                   {children}
-              </Typography>
-          </Box>
+          </StyledBox>
       )}
   </Wrapper>;
 };

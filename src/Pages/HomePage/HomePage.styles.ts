@@ -3,7 +3,8 @@ import { Paper } from '@mui/material'
 
 export const Wrapper = styled(Paper)(({theme})=>({
   // maxHeight: `calc(100vh - ${theme.mixins.toolbar.minHeight}px)`,
-  height: '90vh',
+  height: '93.3vh',
+  borderRadius: 0,
   width: '100%',
   display: 'flex',
   overflow: 'hidden'
@@ -11,11 +12,14 @@ export const Wrapper = styled(Paper)(({theme})=>({
 
 export const TabsContainer = styled(Paper)(({theme}) => ({
   position: 'absolute',
+  maxHeight: '80%',
   zIndex: '500',
-  padding: 20,
-  minWidth: 200,
+  minWidth: 300,
   maxWidth: 600,
-  margin: '20px auto',
+  // overflowY: 'scroll',
+  // overflowX: 'hidden',
+
+  margin: 'auto',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',

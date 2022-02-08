@@ -9,13 +9,14 @@ import { setUser, setUserToken } from '../../Redux/Actions';
 import { connect } from 'react-redux';
 import { ChatCard } from '../index';
 import { User } from '../../Redux/Types';
-import { IconButton } from '@mui/material';
+import { IconButton, Tooltip, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
 
 type MainProps = {
   currentChat: ChatType;
   setCurrentChat: (chat: ChatType) => void;
+  setFriendsListOpen: (value: boolean) => void
 };
 
 interface PropsFromState {
@@ -30,6 +31,7 @@ const ChatCollection: React.FC<AllProps> = ({
   userToken,
   currentChat,
   setCurrentChat,
+  setFriendsListOpen
 }) => {
   const [chats, setChats] = useState<string[]>();
 
@@ -47,10 +49,14 @@ const ChatCollection: React.FC<AllProps> = ({
 
   return (
     <Wrapper>
-      <ChatCollectionOptions>
-        <IconButton>
-          <AddIcon />
+      <ChatCollectionOptions sx={{justifyContent: 'space-around', alignItems: 'center'}}>
+        <Typography variant='h4'>Chats</Typography>
+        <Tooltip title='start new chat'>
+
+        <IconButton onClick={() => setFriendsListOpen(true)}>
+          <AddIcon color='success'/>
         </IconButton>
+        </Tooltip>
       </ChatCollectionOptions>
       {chats?.map((chat_id, i) => {
         return (

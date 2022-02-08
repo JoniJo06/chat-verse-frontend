@@ -38,8 +38,8 @@ type SignUpFormData = {
   last_name: string;
   username: string;
   email: string;
-  birthday: string;
-  gender: string;
+  // birthday: string;
+  // gender: string;
   password: string;
   retype_password: string;
 };
@@ -70,8 +70,8 @@ const SignUpPage: React.FC<AllProps> = ({
     last_name: '',
     username: '',
     email: '',
-    birthday: '',
-    gender: '',
+    // birthday: '',
+    // gender: '',
     password: '',
     retype_password: '',
   });
@@ -98,8 +98,8 @@ const SignUpPage: React.FC<AllProps> = ({
           last_name: formData.last_name,
           username: formData.username,
           email: formData.email,
-          birthday: formData.birthday,
-          gender: formData.gender,
+          // birthday: formData.birthday,
+          // gender: formData.gender,
           password: formData.password,
         })
         .then((res) => {
@@ -183,44 +183,44 @@ const SignUpPage: React.FC<AllProps> = ({
               />
             </Grid>
 
-            <Grid item xs={12} md={6}>
-              <TextField
-                label='Birthday'
-                type='date'
-                name='birthday'
-                fullWidth
-                required
-                onChange={handleChange}
-                value={formData.birthday}
-                InputLabelProps={{ shrink: true }}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <FormLabel id='gender'>Gender *</FormLabel>
-              <RadioGroup
-                row
-                aria-labelledby='gender'
-                name='gender'
-                onChange={handleChange}
-                value={formData.gender}
-              >
-                <FormControlLabel
-                  value='female'
-                  control={<Radio required={true} />}
-                  label='Female'
-                />
-                <FormControlLabel
-                  value='male'
-                  control={<Radio required={true} />}
-                  label='Male'
-                />
-                <FormControlLabel
-                  value='other'
-                  control={<Radio required={true} />}
-                  label='Other'
-                />
-              </RadioGroup>
-            </Grid>
+            {/*<Grid item xs={12} md={6}>*/}
+            {/*  <TextField*/}
+            {/*    label='Birthday'*/}
+            {/*    type='date'*/}
+            {/*    name='birthday'*/}
+            {/*    fullWidth*/}
+            {/*    required*/}
+            {/*    onChange={handleChange}*/}
+            {/*    value={formData.birthday}*/}
+            {/*    InputLabelProps={{ shrink: true }}*/}
+            {/*  />*/}
+            {/*</Grid>*/}
+            {/*<Grid item xs={12} md={6}>*/}
+            {/*  <FormLabel id='gender'>Gender *</FormLabel>*/}
+            {/*  <RadioGroup*/}
+            {/*    row*/}
+            {/*    aria-labelledby='gender'*/}
+            {/*    name='gender'*/}
+            {/*    onChange={handleChange}*/}
+            {/*    value={formData.gender}*/}
+            {/*  >*/}
+            {/*    <FormControlLabel*/}
+            {/*      value='female'*/}
+            {/*      control={<Radio required={true} />}*/}
+            {/*      label='Female'*/}
+            {/*    />*/}
+            {/*    <FormControlLabel*/}
+            {/*      value='male'*/}
+            {/*      control={<Radio required={true} />}*/}
+            {/*      label='Male'*/}
+            {/*    />*/}
+            {/*    <FormControlLabel*/}
+            {/*      value='other'*/}
+            {/*      control={<Radio required={true} />}*/}
+            {/*      label='Other'*/}
+            {/*    />*/}
+            {/*  </RadioGroup>*/}
+            {/*</Grid>*/}
 
             <Grid item xs={12} md={6}>
               <TextField

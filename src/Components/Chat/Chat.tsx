@@ -24,6 +24,7 @@ interface MainProps {
 interface PropsFromState {
   socket: Socket;
   user: User;
+  userToken: string
 }
 
 interface PropsFromDispatch {}
@@ -32,7 +33,7 @@ type AllProps = MainProps & PropsFromState & PropsFromDispatch;
 
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const Chat: React.FC<AllProps> = ({ chat, socket, user }) => {
+const Chat: React.FC<AllProps> = ({ chat, socket, user,userToken }) => {
   const [messages, setMessages] = useState<SingleMessageType[]>([]);
   const [formData, setFormData] = useState<MessageFormData>({ message: '' });
   
@@ -41,6 +42,16 @@ const Chat: React.FC<AllProps> = ({ chat, socket, user }) => {
     //@ts-ignore
     messagesEndRef.current.scrollIntoView({behavior: 'smooth'});
   }
+
+  useEffect(()=>{
+    if(chat?.chat_id){
+    axios(process.env.REACT_APP_BACKEND_URL +'/single-messages/chat/'+ chat.chat_id, {
+      headers: {JWT_TOKEN: userToken}
+    }).then(({data})=> setMessages(data)).catch(err => console.error({err}))
+
+    }
+  }, [chat])
+
 
   const handleNewMessage = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -61,8 +72,6 @@ const Chat: React.FC<AllProps> = ({ chat, socket, user }) => {
         message,
       }
     );
-    // .then(console.log('message sendec'))
-    // .catch(err => console.warn(err.message))
     setFormData((prev) => {
       let temp = prev;
       Object.keys(temp).forEach((param: string) => {
@@ -110,6 +119,7 @@ const Chat: React.FC<AllProps> = ({ chat, socket, user }) => {
               loadingPosition='end'
               variant='contained'
               onClick={scrollBottom}
+              disabled={!chat.chat_id}
             >
               Send
             </LoadingButton>
@@ -118,9 +128,10 @@ const Chat: React.FC<AllProps> = ({ chat, socket, user }) => {
     </Wrapper>
   );
 };
-const mapStateToProps = ({ user, socket }: ApplicationState) => ({
+const mapStateToProps = ({ user, socket,userToken }: ApplicationState) => ({
   user: user.data,
   socket: socket.data,
+  userToken: userToken.data.userToken
 });
 const mapDispatchProps = () => ({});
 
