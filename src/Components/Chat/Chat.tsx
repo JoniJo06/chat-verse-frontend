@@ -54,7 +54,7 @@ const Chat: React.FC<AllProps> = ({ chat, socket, user, userToken }) => {
   }, [ chat ]);
 
   useEffect(() => {
-    if(socket){
+    if(socket?.socket?.connected){
       socket.socket.on('RECEIVE_SINGLE_MESSAGE', ({
                                                     message,
                                                     chat_id,
