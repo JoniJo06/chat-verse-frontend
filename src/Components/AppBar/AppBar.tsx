@@ -241,7 +241,7 @@ const PrimarySearchAppBar: React.FC<Props> = ({
   return (
     <Wrapper>
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position='sticky'>
+        <AppBar position='sticky' sx={{height: '7vh'}}>
           <Toolbar>
             <IconButton
               size='large'

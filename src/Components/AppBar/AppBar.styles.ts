@@ -2,8 +2,7 @@ import {alpha, styled} from '@mui/material/styles'
 import { Switch, InputBase, Box} from '@mui/material'
 
 export const Wrapper = styled('div')(({ theme }) => ({
-    maxHeight: `calc(100vh - ${theme.mixins.toolbar.minHeight}px)`,
-    // height: "100vh",
+    height: "100vh",
 
     '.searchContainer': {
         position: 'relative',

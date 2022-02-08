@@ -2,7 +2,7 @@ import { styled} from "@mui/material/styles";
 import {Paper, Switch} from "@mui/material";
 
 export const Wrapper = styled(Paper)(({theme})=> ({
-    height: '100vh',
+    height: '97vh',
 }))
 
 export const Input = styled('input')({
