@@ -8,7 +8,7 @@ import { AnyAction } from 'redux';
 import { setUser, setUserToken } from '../../Redux/Actions';
 import { connect } from 'react-redux';
 import { ChatCard } from '../index';
-import { User } from '../../Redux/Types';
+import { Socket, User } from '../../Redux/Types';
 import { IconButton, Tooltip, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
@@ -31,7 +31,7 @@ const ChatCollection: React.FC<AllProps> = ({
   userToken,
   currentChat,
   setCurrentChat,
-  setFriendsListOpen
+  setFriendsListOpen,
 }) => {
   const [chats, setChats] = useState<string[]>();
 
@@ -46,6 +46,8 @@ const ChatCollection: React.FC<AllProps> = ({
     };
     void fetchData();
   }, []);
+
+
 
   return (
     <Wrapper>
@@ -71,7 +73,7 @@ const ChatCollection: React.FC<AllProps> = ({
     </Wrapper>
   );
 };
-const mapStateToProps = ({ user, userToken }: ApplicationState) => ({
+const mapStateToProps = ({ user, userToken, socket }: ApplicationState) => ({
   user: user.data,
   userToken: userToken.data.userToken,
 });

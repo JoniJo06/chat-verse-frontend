@@ -66,6 +66,7 @@ const Chat: React.FC<AllProps> = ({ chat, socket, user, userToken }) => {
           return [ ...prev, { message, chat_id, creator, timestamp, read_status } ];
         });
       });
+
     }
   }, [ socket.socket ]);
 
