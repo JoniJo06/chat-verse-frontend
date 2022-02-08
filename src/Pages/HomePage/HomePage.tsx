@@ -13,6 +13,8 @@ import { Avatar, Box, Button, Paper, Tab, Tabs, Typography } from '@mui/material
 import axios from 'axios';
 import stringAvatar from '../../stringToAvatar';
 import { toast } from 'react-toastify';
+import { createChat } from '../../Socket';
+import chat from '../../Components/Chat/Chat';
 
 type FriendType = {
   _id: string
@@ -99,7 +101,7 @@ const HomePage: React.FC<AllProps> = ({
     setTabPage(newValue);
   };
 
-  const createChat = async (user_id: string) => {
+  const handleCreateChat = async (user_id: string) => {
     await axios(process.env.REACT_APP_BACKEND_URL + '/chats/' + user_id + '/create', {
       headers: { JWT_TOKEN: userToken },
     })
@@ -115,7 +117,7 @@ const HomePage: React.FC<AllProps> = ({
         console.error({err})
       });
 
-    socket.socket.emit('CREATE_ROOM', currentChat.chat_id, user.user_id);
+    createChat(socket, currentChat.chat_id, user_id)
   };
 
   return (
@@ -152,7 +154,7 @@ const HomePage: React.FC<AllProps> = ({
                   alignItems: 'center',
                 })}
                 >
-                  <Button fullWidth onClick={() => createChat(el._id)}>
+                  <Button fullWidth onClick={() => handleCreateChat(el._id)}>
                     {el.profile_pic ? <Avatar
                       alt={el.username} src={el.profile_pic} sx={{ width: 30, height: 30 }}
                     /> : <Avatar {...stringAvatar(el.username, 30)} />}
