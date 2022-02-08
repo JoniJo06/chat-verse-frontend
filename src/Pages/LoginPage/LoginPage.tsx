@@ -65,7 +65,6 @@ const LoginPage: React.FC<AllProps> = ({ user, setUserToken, setUser, setSocket 
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-  console.log('login')
     axios
       .post(process.env.REACT_APP_BACKEND_URL + '/users/login', {
         username: formData.username,

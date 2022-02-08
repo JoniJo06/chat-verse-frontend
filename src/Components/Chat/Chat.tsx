@@ -54,17 +54,19 @@ const Chat: React.FC<AllProps> = ({ chat, socket, user, userToken }) => {
   }, [ chat ]);
 
   useEffect(() => {
-    socket.socket.on('RECEIVE_SINGLE_MESSAGE', ({
-                                                  message,
-                                                  chat_id,
-                                                  creator,
-                                                  timestamp,
-                                                  read_status,
-                                                }) => {
-      setMessages((prev: SingleMessageType[]) => {
-        return [ ...prev, { message, chat_id, creator, timestamp, read_status } ];
+    if(socket){
+      socket.socket.on('RECEIVE_SINGLE_MESSAGE', ({
+                                                    message,
+                                                    chat_id,
+                                                    creator,
+                                                    timestamp,
+                                                    read_status,
+                                                  }) => {
+        setMessages((prev: SingleMessageType[]) => {
+          return [ ...prev, { message, chat_id, creator, timestamp, read_status } ];
+        });
       });
-    });
+    }
   }, [ socket.socket ]);
 
   const handleNewMessage = (e: FormEvent<HTMLFormElement>) => {
