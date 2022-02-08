@@ -3,7 +3,7 @@ import { Paper } from '@mui/material'
 
 export const Wrapper = styled(Paper)(({theme})=>({
   // maxHeight: `calc(100vh - ${theme.mixins.toolbar.minHeight}px)`,
-  height: '93.3vh',
+  height: `calc(100vh - 65px)`,
   borderRadius: 0,
   width: '100%',
   display: 'flex',
