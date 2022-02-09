@@ -45,7 +45,7 @@ const ChatCollection: React.FC<AllProps> = ({
         .catch((err) => console.log(err));
     };
     void fetchData();
-  }, []);
+  }, [currentChat]);
 
 
 

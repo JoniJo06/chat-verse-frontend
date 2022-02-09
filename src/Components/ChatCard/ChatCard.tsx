@@ -4,7 +4,7 @@ import { ChatType } from '../../Types';
 import axios from 'axios';
 import { ApplicationState } from '../../Redux';
 import { connect } from 'react-redux';
-import { Avatar } from '@mui/material';
+import { Avatar, Typography } from '@mui/material';
 import { Socket, User } from '../../Redux/Types';
 import { createChat } from '../../Socket';
 import stringAvatar from '../../stringToAvatar';
@@ -63,7 +63,7 @@ const ChatCard: React.FC<AllProps> = ({ chat_id, setCurrentChat, userToken, sock
       ) : (
          <Avatar  {...stringAvatar(chat.name, 30)} />
        )}
-      {chat?.name}
+      <Typography >{chat?.name}</Typography>
 
     </Wrapper>
   );

@@ -1,7 +1,7 @@
 //Styles
 import React, { useEffect, useRef, useState } from 'react';
 import { TabsContainer, Wrapper } from './HomePage.styles';
-import { Chat, ChatCollection, ChatCollectionTabPanel, TopicCollection } from '../../Components';
+import { Chat, ChatCollection, ChatCollectionTabPanel } from '../../Components';
 // import { RootState } from '../../Redux/Reducers';
 // import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -14,7 +14,6 @@ import axios from 'axios';
 import stringAvatar from '../../stringToAvatar';
 import { toast } from 'react-toastify';
 import { createChat } from '../../Socket';
-import chat from '../../Components/Chat/Chat';
 
 type FriendType = {
   _id: string
@@ -71,13 +70,18 @@ const HomePage: React.FC<AllProps> = ({
   };
 
   useEffect(() => {
-    if (friendsListOpen) {
-      axios(process.env.REACT_APP_BACKEND_URL + '/users/friends/info/chat-list', {
-        headers: { JWT_TOKEN: userToken },
-      })
-        .then(({ data }) => setFriends(data))
-        .catch(err => console.log(err));
-    }
+    const fetchData = async () => {
+
+      if (friendsListOpen) {
+        await axios(process.env.REACT_APP_BACKEND_URL + '/users/friends/info/chat-list', {
+          headers: { JWT_TOKEN: userToken },
+        })
+          .then(({ data }) => setFriends(data))
+          .catch(err => console.log(err));
+      }
+    createChat(socket, currentChat.chat_id, user.user_id);
+    };
+    void fetchData();
   }, [ friendsListOpen ]);
 
   closeOnOutsideClick(friendsListRef);
@@ -104,18 +108,18 @@ const HomePage: React.FC<AllProps> = ({
       headers: { JWT_TOKEN: userToken },
     })
       .then(({ data }) => {
-        toast.success('successful')
+        toast.success('successful');
         setCurrentChat((prev: ChatType): ChatType => {
           return data.chat;
-        })
+        });
       })
       .catch(err => {
-        if(err.response.data.status === 'exist')
-          toast.error('chat already exist')
-        console.error({err})
+        if (err.response.data.status === 'exist')
+          toast.error('chat already exist');
+        console.error({ err });
       });
 
-    createChat(socket, currentChat.chat_id, user_id)
+    createChat(socket, currentChat.chat_id, user_id);
   };
 
   return (
@@ -152,11 +156,18 @@ const HomePage: React.FC<AllProps> = ({
                   alignItems: 'center',
                 })}
                 >
-                  <Button fullWidth onClick={() => handleCreateChat(el._id)}>
+                  <Button
+                    sx={{display: 'flex', justifyContent: 'flex-start'}}
+                    fullWidth onClick={() => {
+                    void handleCreateChat(el._id);
+                    setFriendsListOpen(false);
+                  }}
+                  >
                     {el.profile_pic ? <Avatar
                       alt={el.username} src={el.profile_pic} sx={{ width: 30, height: 30 }}
                     /> : <Avatar {...stringAvatar(el.username, 30)} />}
                     <Typography variant='h5'>{el.username}</Typography>
+
                   </Button>
                 </Paper>
               );

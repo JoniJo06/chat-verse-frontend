@@ -103,7 +103,6 @@ const PrimarySearchAppBar: React.FC<Props> = ({
   };
 
   useEffect(()=> {
-
     if (!searchValue.trim()) {
       setSearchResult({ user: null, users: [] });
       return;
@@ -114,6 +113,7 @@ const PrimarySearchAppBar: React.FC<Props> = ({
     )
       .then((res) => setSearchResult(res.data))
       .catch((err) => console.log(err));
+
   }, [searchValue])
 
 
@@ -276,7 +276,7 @@ const PrimarySearchAppBar: React.FC<Props> = ({
                             setSearchValue('')
                           }}
                         >
-                          Send Friendrequest
+                           Send Friendrequest
                         </Button>
                       ) : (
                         <Typography variant='h6'>
