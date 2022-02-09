@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { ChangeEvent } from 'react';
+import React, { useEffect, useState } from 'react';
+// import { ChangeEvent } from 'react';
 import {
   AppBar,
-  Badge,
+  // Badge,
   Button,
   Box,
   IconButton,
@@ -13,15 +13,17 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Avatar,
+  Avatar, Tooltip,
 } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
+// import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+// import MailIcon from '@mui/icons-material/Mail';
+// import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+
 
 import {
   MaterialUISwitch,
@@ -41,6 +43,7 @@ import { ProjectEnum } from '../../Enums';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import stringAvatar from '../../stringToAvatar';
 
 interface SearchUser {
   _id: string;
@@ -76,6 +79,8 @@ const PrimarySearchAppBar: React.FC<Props> = ({
     setMobileMoreAnchorEl,
   ] = React.useState<null | HTMLElement>(null);
 
+  const [searchValue, setSearchValue] = useState('')
+
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const navigate = useNavigate();
@@ -97,20 +102,20 @@ const PrimarySearchAppBar: React.FC<Props> = ({
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const handleSearch = async (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    if (!e.target.value.trim()) {
+  useEffect(()=> {
+
+    if (!searchValue.trim()) {
       setSearchResult({ user: null, users: [] });
       return;
     }
-    await axios(
+     axios(
       String(process.env.REACT_APP_BACKEND_URL) +
-        `/search?search=${e.target.value}&type=user`
+        `/search?search=${searchValue}&type=user`
     )
       .then((res) => setSearchResult(res.data))
       .catch((err) => console.log(err));
-  };
+  }, [searchValue])
+
 
   const sendFriendRequest = (user: SearchUser | null) => {
     if (!user) return;
@@ -122,40 +127,6 @@ const PrimarySearchAppBar: React.FC<Props> = ({
       .catch((err) => console.log(err));
   };
 
-  const stringToColor = (string: string) => {
-    let hash = 0;
-    let i;
-
-    /* eslint-disable no-bitwise */
-    for (i = 0; i < string.length; i += 1) {
-      hash = string.charCodeAt(i) + ((hash << 5) - hash);
-    }
-
-    let color = '#';
-
-    for (i = 0; i < 3; i += 1) {
-      const value = (hash >> (i * 8)) & 0xff;
-      color += `00${value.toString(16)}`.substr(-2);
-    }
-    /* eslint-enable no-bitwise */
-
-    return color;
-  };
-  const stringAvatar = (name: string) => {
-    const twoWords: boolean = name.split(' ').length >= 2;
-    return {
-      sx: {
-        bgcolor: stringToColor(name),
-        width: 30,
-        height: 30,
-        mr: '5px',
-      },
-
-      children: `${name.split(' ')[0][0]}${
-        twoWords ? name.split(' ')[1][0] : ''
-      }`,
-    };
-  };
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -243,15 +214,15 @@ const PrimarySearchAppBar: React.FC<Props> = ({
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position='sticky' sx={{height: '7vh'}}>
           <Toolbar>
-            <IconButton
-              size='large'
-              edge='start'
-              color='inherit'
-              aria-label='open drawer'
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
+            {/*<IconButton*/}
+            {/*  size='large'*/}
+            {/*  edge='start'*/}
+            {/*  color='inherit'*/}
+            {/*  aria-label='open drawer'*/}
+            {/*  sx={{ mr: 2 }}*/}
+            {/*>*/}
+            {/*  <MenuIcon />*/}
+            {/*</IconButton>*/}
             <Typography
               variant='h6'
               noWrap
@@ -266,11 +237,18 @@ const PrimarySearchAppBar: React.FC<Props> = ({
                 <SearchIcon />
               </SearchIconWrapper>
               <StyledInputBase
-                placeholder='Search'
-                inputProps={{ 'aria-label': 'search' }}
-                onChange={handleSearch}
+                placeholder='Search User'
+                inputProps={{ 'aria-label': 'search user' }}
+                value={searchValue}
+                onChange={(e)=> setSearchValue(e.target.value)}
               />
-              <AccordionContainer>
+              <Tooltip title='clear'>
+
+              <IconButton onClick={()=> setSearchValue('')}>
+              <HighlightOffIcon color='error' />
+              </IconButton>
+              </Tooltip>
+              <AccordionContainer >
                 {searchResult?.user && (
                   <Accordion sx={{ mb: 0 }}>
                     <AccordionSummary
@@ -284,7 +262,7 @@ const PrimarySearchAppBar: React.FC<Props> = ({
                           src={searchResult.user.profile_pic}
                         />
                       ) : (
-                        <Avatar {...stringAvatar(searchResult.user.username)} />
+                        <Avatar {...stringAvatar(searchResult.user.username, 24)} />
                       )}
                       <Typography>{searchResult.user.username}</Typography>
                     </AccordionSummary>
@@ -293,7 +271,10 @@ const PrimarySearchAppBar: React.FC<Props> = ({
                       {userToken ? (
                         <Button
                           variant='contained'
-                          onClick={() => sendFriendRequest(searchResult.user)}
+                          onClick={() => {
+                            sendFriendRequest(searchResult.user)
+                            setSearchValue('')
+                          }}
                         >
                           Send Friendrequest
                         </Button>
@@ -319,7 +300,7 @@ const PrimarySearchAppBar: React.FC<Props> = ({
                             src={element.profile_pic}
                           />
                         ) : (
-                          <Avatar {...stringAvatar(element.username)} />
+                          <Avatar {...stringAvatar(element.username, 24)} />
                         )}
                         <Typography>{element.username}</Typography>
                       </AccordionSummary>
@@ -327,7 +308,10 @@ const PrimarySearchAppBar: React.FC<Props> = ({
                         {userToken ? (
                           <Button
                             variant='contained'
-                            onClick={() => sendFriendRequest(element)}
+                            onClick={() => {
+                              sendFriendRequest(element)
+                              setSearchValue('')
+                            }}
                           >
                             Send Friendrequest
                           </Button>

@@ -48,14 +48,13 @@ const ChatCard: React.FC<AllProps> = ({ chat_id, setCurrentChat, userToken, sock
         .catch(err => console.error(err));
     };
     void fetchData();
-  }, []);
+  }, [chat_id]);
 
   // @ts-ignore
   return (
     <Wrapper
       onClick={() => {
         createChat(socket, chat_id, user.user_id);
-        // console.log(chat);
           setCurrentChat(chat);
       }}
     >

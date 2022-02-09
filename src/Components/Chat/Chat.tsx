@@ -11,6 +11,7 @@ import SendIcon from '@mui/icons-material/Send';
 import Stack from '@mui/material/Stack';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Paper } from '@mui/material';
+import { SingleMessage } from '../index';
 
 type MessageFormData = {
   message: string;
@@ -54,7 +55,10 @@ const Chat: React.FC<AllProps> = ({ chat, socket, user, userToken }) => {
   }, [ chat ]);
 
   useEffect(() => {
-    if(socket?.socket?.connected){
+    if(Object.keys(socket.socket).length > 0){
+
+    socket.socket.on('connect', () => {
+
       socket.socket.on('RECEIVE_SINGLE_MESSAGE', ({
                                                     message,
                                                     chat_id,
@@ -66,9 +70,9 @@ const Chat: React.FC<AllProps> = ({ chat, socket, user, userToken }) => {
           return [ ...prev, { message, chat_id, creator, timestamp, read_status } ];
         });
       });
-
+    });
     }
-  }, [ socket.socket ]);
+  }, [ socket.socket?.connected ]);
 
   const handleNewMessage = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -111,7 +115,7 @@ const Chat: React.FC<AllProps> = ({ chat, socket, user, userToken }) => {
     <Wrapper>
       <Paper className='messagesContainer'>
         {messages?.map((el, i) => {
-          return <h4 key={i}>{el.message}</h4>;
+          return <SingleMessage key={i} me={el.creator === user.user_id} message={el} />;
         })}
         <div ref={messagesEndRef}></div>
       </Paper>

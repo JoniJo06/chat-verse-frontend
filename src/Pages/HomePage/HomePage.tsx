@@ -49,8 +49,6 @@ const HomePage: React.FC<AllProps> = ({
                                                              });
   const friendsListRef = useRef(null);
   const navigate = useNavigate();
-  // console.log(socket)
-  // console.log(userToken)
 
   const closeOnOutsideClick = (ref: any) => {
     useEffect(() => {
@@ -122,7 +120,7 @@ const HomePage: React.FC<AllProps> = ({
 
   return (
     <Wrapper>
-      <TopicCollection />
+      {/*<TopicCollection />*/}
       <Chat chat={currentChat} />
       <ChatCollection
         currentChat={currentChat} setCurrentChat={setCurrentChat} setFriendsListOpen={setFriendsListOpen}

@@ -76,7 +76,6 @@ const SignUpPage: React.FC<AllProps> = ({
     retype_password: '',
   });
 
-  console.log(userToken);
 
   const theme = useTheme();
   const navigate = useNavigate();
@@ -88,7 +87,6 @@ const SignUpPage: React.FC<AllProps> = ({
   };
 
   const handleSignUp = (e: any) => {
-    console.log(process.env.REACT_APP_BACKEND_URL);
     e.preventDefault();
 
     if (formData.password === formData.retype_password) {
@@ -166,7 +164,7 @@ const SignUpPage: React.FC<AllProps> = ({
                 onChange={handleChange}
                 value={formData.username}
                 inputProps={{
-                  minLength: 5,
+                  minLength: 3,
                 }}
               />
             </Grid>
@@ -233,7 +231,7 @@ const SignUpPage: React.FC<AllProps> = ({
                 onChange={handleChange}
                 value={formData.password}
                 inputProps={{
-                  minLength: 8,
+                  minLength: 3,
                 }}
               />
             </Grid>

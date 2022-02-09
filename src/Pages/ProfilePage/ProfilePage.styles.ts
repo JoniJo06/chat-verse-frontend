@@ -1,8 +1,9 @@
 import { styled} from "@mui/material/styles";
-import {Paper, Switch} from "@mui/material";
+import { Paper, Switch } from '@mui/material';
 
 export const Wrapper = styled(Paper)(({theme})=> ({
     height: '97vh',
+  // overflow: 'auto'
 }))
 
 export const Input = styled('input')({
@@ -52,3 +53,4 @@ export const Input = styled('input')({
       boxSizing: 'border-box',
     },
   }));
+

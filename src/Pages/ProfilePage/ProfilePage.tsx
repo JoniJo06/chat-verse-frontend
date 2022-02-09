@@ -14,6 +14,8 @@ import {
   Tabs,
   TextField,
   Tooltip,
+  tooltipClasses,
+  TooltipProps,
   Typography,
 } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -29,6 +31,10 @@ import ClearIcon from '@mui/icons-material/Clear';
 import BlockIcon from '@mui/icons-material/Block';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import stringAvatar from '../../stringToAvatar';
+import { styled } from '@mui/material/styles';
+import { User } from '../../Redux/Types';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
 
 type FormDataType = {
   first_name: string;
@@ -36,6 +42,8 @@ type FormDataType = {
   email: string;
   phone: string;
   slogan: string;
+  password: string;
+  retype_password: string;
 };
 
 type UserInfoType = {
@@ -68,6 +76,7 @@ interface MainProps {
 
 interface PropsFromState {
   userToken: string;
+  user: User;
 }
 
 interface PropsFromDispatch {
@@ -75,7 +84,7 @@ interface PropsFromDispatch {
 
 type AllProps = MainProps & PropsFromState & PropsFromDispatch;
 
-const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
+const ProfilePage: React.FC<AllProps> = ({ userToken, user }) => {
   const [ expanded, setExpanded ] = React.useState<string | false>(false);
   const [ tabPage, setTabPage ] = useState<number>(0);
   const [ formData, setFormData ] = useState<FormDataType>({
@@ -84,6 +93,8 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
                                                              email: '',
                                                              phone: '',
                                                              slogan: '',
+                                                             password: '',
+                                                             retype_password: '',
                                                            });
   const [ edit, setEdit ] = useState(false);
   const [ usernameEdit, setUsernameEdit ] = useState(false);
@@ -106,6 +117,10 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
 
   const handleProfileChange = async (e: any) => {
     e.preventDefault();
+    if (user.user_id === '6203ae424b788f53c883f896') {
+      toast.error('demo profile isn\'t changleble');
+      return;
+    }
     if (!edit) {
       formData.first_name = userInfo.first_name;
       formData.last_name = userInfo.last_name;
@@ -114,6 +129,10 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
       formData.slogan = userInfo.slogan;
       setEdit(!edit);
     } else {
+      if (formData.password?.trim() && formData.password !== formData.retype_password) {
+        toast.error('password doesn\'t match');
+        return;
+      }
       await axios.put(process.env.REACT_APP_BACKEND_URL + '/users/profile/info', {
         first_name: formData.first_name,
         last_name: formData.last_name,
@@ -134,6 +153,8 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
       setFetchInfo(true);
       setEdit(!edit);
     }
+    formData.password = '';
+    formData.retype_password = '';
   };
 
   const changeFormData = (e: any) => {
@@ -170,6 +191,10 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
 
   const handleChangeUsername = async (e: any) => {
     e.preventDefault();
+    if (user.user_id === '6203ae424b788f53c883f896') {
+      toast.error('demo username isn\'t changleble');
+      return;
+    }
     if (!usernameEdit) {
       setUsernameFormData(userInfo.username);
       setUsernameEdit(!usernameEdit);
@@ -229,7 +254,7 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
     })
       .then(() => toast.success('successful'))
       .catch(err => console.log(err));
-    setFetch(true)
+    setFetch(true);
   };
 
   const rejectFriendRequest = async (user_id: string) => {
@@ -238,7 +263,7 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
     })
       .then(() => toast.success('successful'))
       .catch(err => console.log(err));
-    setFetch(true)
+    setFetch(true);
   };
 
   const cancelPendingFriendRequest = async (user_id: string) => {
@@ -247,7 +272,7 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
     })
       .then(() => toast.success('successful'))
       .catch(err => console.log(err));
-    setFetch(true)
+    setFetch(true);
   };
 
   const removeFriend = async (user_id: string) => {
@@ -256,17 +281,29 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
     })
       .then(() => toast.success('successful'))
       .catch(err => console.log(err));
-    setFetch(true)
+    setFetch(true);
   };
 
-  const addToBlacklist = async (user_id:string) => {
+  const addToBlacklist = async (user_id: string) => {
     await axios(process.env.REACT_APP_BACKEND_URL + '/users/friends/blacklist/add/' + user_id, {
       headers: { JWT_TOKEN: userToken },
     })
       .then(() => toast.success('successful'))
       .catch(err => console.log(err));
-    setFetch(true)
-  }
+    setFetch(true);
+  };
+
+  const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: theme.palette.background.paper,
+      color: theme.palette.text.primary,
+      maxWidth: 220,
+      fontSize: theme.typography.pxToRem(12),
+      border: '1px solid #dadde9',
+    },
+  }));
 
   const removeFromBlacklist = async (user_id: string) => {
     await axios(process.env.REACT_APP_BACKEND_URL + '/users/friends/blacklist/remove/' + user_id, {
@@ -274,7 +311,7 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
     })
       .then(() => toast.success('successful'))
       .catch(err => console.log(err));
-    setFetch(true)
+    setFetch(true);
   };
 
   return (
@@ -296,9 +333,7 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
         >
           {userInfo.profile_pic ? (
             <Avatar
-              alt='Remy Sharp'
-              src={userInfo.profile_pic}
-              sx={{ width: 150, height: 150, margin: 'auto', mb: '2rem' }}
+              alt='Remy Sharp' src={userInfo.profile_pic} sx={{ width: 150, height: 150, margin: 'auto', mb: '2rem' }}
             />
 
           ) : (
@@ -306,9 +341,11 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
            )}
           <label htmlFor='icon-button-file'>
             <Input
+
               accept='image/*' id='icon-button-file' type='file' onChange={(e: any) => console.log(e.target.value)}
             />
             <IconButton
+              disabled
               aria-label='upload picture'
               component='span'
               style={{ position: 'absolute', right: '-20px', bottom: '-15px' }}
@@ -318,7 +355,10 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
           </label>
         </div>
         <Box sx={{ textAlign: 'center' }}>
-          <form onSubmit={handleChangeUsername}>
+          <form
+            style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '20px 0', gap: '10px' }}
+            onSubmit={handleChangeUsername}
+          >
             <TextField
               label='Username'
               value={usernameEdit ? usernameFormData : userInfo.username}
@@ -326,20 +366,35 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
               inputProps={{ readOnly: !usernameEdit }}
               onChange={(e: any) => setUsernameFormData(e.target.value)}
             />
-            <Button variant='contained' sx={{ mb: '25px' }} type='submit'>
-              {!usernameEdit ? 'Change Username' : 'Save Username'}
-            </Button>
+
+            <IconButton type='submit'>
+              {!usernameEdit ? <EditIcon /> : <SaveIcon />}
+            </IconButton>
           </form>
           <Stack
             justifyContent='center' direction='row' spacing={1} alignItems='center'
           >
+
             <Typography>private</Typography>
-            <AntSwitch
-              checked={userInfo.public}
-              inputProps={{ 'aria-label': 'ant design' }}
-              disabled={togglePublicLoading}
-              onChange={togglePublic}
-            />
+            <HtmlTooltip
+              title={
+
+                <React.Fragment>
+                  <h4>Private/Public</h4>
+                  <p>This will toggle your visibility!</p>
+                  <p>Private: only your friends can find you!</p>
+                  <p>Public: anyone can find you!</p>
+                </React.Fragment>
+
+              }
+            >
+              <AntSwitch
+                checked={userInfo.public}
+                inputProps={{ 'aria-label': 'ant design' }}
+                disabled={togglePublicLoading}
+                onChange={togglePublic}
+              />
+            </HtmlTooltip>
             <Typography>public</Typography>
           </Stack>
         </Box>
@@ -361,8 +416,9 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
                   label='First Name'
                   value={edit ? formData.first_name : userInfo.first_name}
                   name='first_name'
+                  type='text'
                   fullWidth
-                  inputProps={{ readOnly: !edit }}
+                  disabled={!edit}
                   onChange={changeFormData}
                 />
               </Grid>
@@ -371,8 +427,9 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
                   label='Last Name'
                   value={edit ? formData.last_name : userInfo.last_name}
                   name='last_name'
+                  type='text'
                   fullWidth
-                  inputProps={{ readOnly: !edit }}
+                  disabled={!edit}
                   onChange={changeFormData}
                 />
               </Grid>
@@ -381,8 +438,9 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
                   label='Email'
                   value={edit ? formData.email : userInfo.email}
                   name='email'
+                  type='email'
                   fullWidth
-                  inputProps={{ readOnly: !edit }}
+                  disabled={!edit}
                   onChange={changeFormData}
                 />
               </Grid>
@@ -391,8 +449,9 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
                   label='Phone'
                   value={edit ? formData.phone : userInfo.phone}
                   name='phone'
+                  type='tel'
                   fullWidth
-                  inputProps={{ readOnly: !edit }}
+                  disabled={!edit}
                   onChange={changeFormData}
                 />
               </Grid>
@@ -404,10 +463,33 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
                   value={edit ? formData.slogan : userInfo.slogan}
                   name='slogan'
                   fullWidth
-                  inputProps={{ readOnly: !edit }}
+                  disabled={!edit}
                   onChange={changeFormData}
                 />
               </Grid>
+              {edit && (
+              <>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label='password (only for password change)'
+                  value={formData?.password}
+                  name='password'
+                  type='password'
+                  fullWidth
+                  onChange={changeFormData}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label='retype password (only for password change)'
+                  value={formData?.retype_password}
+                  name='retype_password'
+                  type='password'
+                  fullWidth
+                  onChange={changeFormData}
+                />
+              </Grid>
+            </>)}
             </Grid>
           </form>
         </Box>
@@ -557,8 +639,9 @@ const ProfilePage: React.FC<AllProps> = ({ userToken }) => {
   );
 };
 
-const mapStateToProps = ({ userToken }: ApplicationState) => ({
+const mapStateToProps = ({ userToken, user }: ApplicationState) => ({
   userToken: userToken.data.userToken,
+  user: user.data,
 });
 const mapDispatchProps = () => ({});
 
