@@ -117,7 +117,7 @@ const ProfilePage: React.FC<AllProps> = ({ userToken, user }) => {
 
   const handleProfileChange = async (e: any) => {
     e.preventDefault();
-    if (user.user_id === '6203ae424b788f53c883f896') {
+    if (user.user_id === '6203e9e79e462c828dfa5e27') {
       toast.error('demo profile isn\'t changleble');
       return;
     }
@@ -191,7 +191,7 @@ const ProfilePage: React.FC<AllProps> = ({ userToken, user }) => {
 
   const handleChangeUsername = async (e: any) => {
     e.preventDefault();
-    if (user.user_id === '6203ae424b788f53c883f896') {
+    if (user.user_id === '6203e9e79e462c828dfa5e27') {
       toast.error('demo username isn\'t changleble');
       return;
     }
