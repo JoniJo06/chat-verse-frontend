@@ -100,7 +100,7 @@ const LoginPage: React.FC<AllProps> = ({ user, setUserToken, setUser, setSocket 
           <Grid container spacing={2} sx={{ marginTop: 1 }}>
             <Grid item xs={12}>
               <TextField
-                label='username'
+                label='username (sample=demo)'
                 placeholder='Enter username'
                 type='text'
                 name='username'
@@ -112,7 +112,7 @@ const LoginPage: React.FC<AllProps> = ({ user, setUserToken, setUser, setSocket 
             </Grid>
             <Grid item xs={12}>
               <TextField
-                label='password'
+                label='password (sample=demo)'
                 placeholder='Enter password'
                 type='password'
                 name='password'
@@ -148,6 +148,7 @@ const LoginPage: React.FC<AllProps> = ({ user, setUserToken, setUser, setSocket 
             Sign up
           </NavLink>
         </Typography>
+
       </Paper>
     </Grid>
   );

@@ -231,7 +231,7 @@ const SignUpPage: React.FC<AllProps> = ({
                 onChange={handleChange}
                 value={formData.password}
                 inputProps={{
-                  minLength: 3,
+                  minLength: 8,
                 }}
               />
             </Grid>
